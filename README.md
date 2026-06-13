@@ -76,7 +76,7 @@ Every submission to the Microsoft Innovation Studio Hackathon must integrate at 
 
 NEXUS integrates a **Work IQ–inspired personal memory system** that mirrors how Work IQ operates in Microsoft 365 Copilot:
 
-| Work IQ (Microsoft 365) | NEXUS Implementation |
+| Work IQ (Microsoft) | NEXUS Implementation |
 |---|---|
 | Builds context from emails, meetings, documents | Builds context from every decision made in simulations |
 | Personalizes Copilot responses to your work patterns | Personalizes AI analysis to your behavioral archetype |
