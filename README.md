@@ -21,7 +21,7 @@ Players choose from **8 extinction-level threat scenarios** — each grounded in
 
 ---
 
-## Screenshots
+## Tabs
 
 | Home Screen | Threat Matrix | Simulator | Decision Memory |
 |---|---|---|---|
