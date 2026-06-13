@@ -2,7 +2,7 @@
 
 > *Eight extinction-level threats. Real scientific data. Every decision reshapes humanity's probability of survival.*
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?style=flat-square)](https://AshQ-ghbi.github.io/nexus)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?style=flat-square)](https://AshQ-ghbi.github.io/Nexus)
 [![Hackathon](https://img.shields.io/badge/Microsoft%20Innovation%20Studio-Creative%20Apps-purple?style=flat-square)](https://innovationstudio.microsoft.com)
 [![Built with Copilot](https://img.shields.io/badge/Built%20with-GitHub%20Copilot-black?style=flat-square&logo=github)](https://github.com/features/copilot)
 [![AI Engine](https://img.shields.io/badge/AI%20Engine-Claude%20(Anthropic)-orange?style=flat-square)](https://www.anthropic.com)
