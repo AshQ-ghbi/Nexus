@@ -11,7 +11,7 @@
 
 ## What is NEXUS?
 
-NEXUS is a **cinematic, AI-powered civilization collapse simulator** built for the [Microsoft Innovation Studio Hackathon](https://innovationstudio.microsoft.com) under the **Creative Apps** track.
+NEXUS is a **cinematic, AI-powered civilization collapse simulator** built for the [Microsoft - Agents League Hackathon](https://innovationstudio.microsoft.com) under the **Creative Apps** track.
 
 It transforms real-world scientific and geopolitical data into an interactive decision-making engine — asking a single terrifying question:
 
