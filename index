@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>NEXUS — Civilization Collapse Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#03050d;--bg2:#070b18;--bg3:#0c1220;
+  --card:#0e1628;--card2:#141e35;
+  --border:#1a2740;--border2:#243550;
+  --text:#dde6f0;--text2:#7a9ab8;--text3:#374f6a;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#60a5fa;
+  --red:#ef4444;--amber:#f59e0b;--amber3:#fbbf24;
+  --green:#10b981;--green3:#34d399;
+  --purple:#8b5cf6;--purple3:#a78bfa;
+  --cyan:#06b6d4;--cyan3:#22d3ee;
+  --orb:'Orbitron',monospace;
+  --grotesk:'Space Grotesk',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--grotesk);min-height:100vh;overflow-x:hidden}
+.page{display:none;min-height:100vh}
+.page.active{display:block;animation:pageIn .45s cubic-bezier(.22,1,.36,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
+
+/* ── TICKER ── */
+.ticker-wrap{background:rgba(239,68,68,.08);border-bottom:1px solid rgba(239,68,68,.25);padding:6px 0;overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-block;animation:tickerScroll 40s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes tickerScroll{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+.ticker-item{display:inline-block;margin-right:60px;font-family:var(--mono);font-size:9px;color:var(--text2);letter-spacing:1px}
+.ticker-dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:8px;vertical-align:middle}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;background:rgba(3,5,13,.92);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:10px;height:50px}
+.nav-logo{font-family:var(--orb);font-size:13px;font-weight:900;letter-spacing:5px;background:linear-gradient(90deg,var(--blue3),var(--purple3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex:1}
+.nav-sub{font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;display:block;-webkit-text-fill-color:var(--text3)}
+.nav-live{font-family:var(--mono);font-size:8px;color:var(--red);letter-spacing:2px;border:1px solid rgba(239,68,68,.4);background:rgba(239,68,68,.08);padding:3px 8px;border-radius:3px;display:flex;align-items:center;gap:5px}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:calc(100vh - 82px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80') center/cover no-repeat;opacity:.06;filter:saturate(0)}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,var(--bg) 80%)}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:.18;animation:gridDrift 24s linear infinite}
+@keyframes gridDrift{from{background-position:0 0}to{background-position:44px 44px}}
+.hero-badge{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--red);border:1px solid rgba(239,68,68,.4);background:rgba(239,68,68,.08);padding:5px 14px;border-radius:3px;margin-bottom:22px;text-transform:uppercase;position:relative;z-index:1;animation:badgePulse 3s ease infinite}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 rgba(239,68,68,0)}50%{box-shadow:0 0 16px rgba(239,68,68,.2)}}
+.hero-title{font-family:var(--orb);font-size:clamp(52px,16vw,96px);font-weight:900;letter-spacing:-2px;text-align:center;line-height:.9;position:relative;z-index:1;margin-bottom:6px}
+.hero-title .n{color:var(--blue3);text-shadow:0 0 40px rgba(96,165,250,.6)}
+.hero-title .e{color:var(--purple3)}
+.hero-title .x{color:var(--red);text-shadow:0 0 40px rgba(239,68,68,.6)}
+.hero-title .u{color:var(--amber3)}
+.hero-title .s{color:var(--cyan3);text-shadow:0 0 40px rgba(34,211,238,.6)}
+.hero-tagline{font-family:var(--mono);font-size:9px;letter-spacing:6px;color:var(--text3);text-transform:uppercase;margin-bottom:28px;position:relative;z-index:1}
+.survival-ring{position:relative;width:150px;height:150px;margin:0 auto 28px;z-index:1}
+.survival-ring svg{width:100%;height:100%;filter:drop-shadow(0 0 20px rgba(59,130,246,.3))}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(--orb);font-size:28px;font-weight:700;color:var(--amber3)}
+.ring-txt{font-family:var(--mono);font-size:7px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-top:2px}
+.ring-delta{font-family:var(--mono);font-size:9px;color:var(--green3);margin-top:3px}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:340px;margin-bottom:18px;z-index:1;position:relative}
+.hstat{background:rgba(14,22,40,.85);border:1px solid var(--border);border-radius:8px;padding:12px 6px;text-align:center;backdrop-filter:blur(8px)}
+.hstat-val{font-family:var(--orb);font-size:16px;font-weight:700;color:var(--blue3)}
+.hstat-lbl{font-family:var(--mono);font-size:7px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+
+/* ── DOOMSDAY CLOCK ── */
+.doomsday{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:12px 16px;margin:16px 0;width:100%;max-width:340px;z-index:1;position:relative}
+.dd-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:rgba(239,68,68,.7);text-transform:uppercase;margin-bottom:8px}
+.dd-clock{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+.dd-unit-val{font-family:var(--orb);font-size:18px;font-weight:700;color:var(--red)}
+.dd-unit-lbl{font-family:var(--mono);font-size:7px;color:var(--text3);letter-spacing:2px;text-transform:uppercase}
+
+/* ── RADAR ── */
+.radar-section{width:100%;max-width:340px;z-index:1;position:relative;margin-bottom:20px}
+.radar-title{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;text-align:center;margin-bottom:8px}
+
+.hero-sub{font-size:11px;color:var(--text2);text-align:center;max-width:300px;line-height:1.9;margin-bottom:24px;z-index:1;position:relative}
+.cta-btn{position:relative;z-index:1;background:transparent;border:1px solid var(--blue3);color:var(--blue3);font-family:var(--orb);font-size:10px;font-weight:600;padding:14px 36px;border-radius:4px;cursor:pointer;letter-spacing:4px;text-transform:uppercase;transition:.3s;overflow:hidden;width:100%;max-width:280px}
+.cta-btn::before{content:'';position:absolute;inset:0;background:var(--blue3);transform:scaleX(0);transform-origin:left;transition:.3s;z-index:-1}
+.cta-btn:hover{color:var(--bg);box-shadow:0 0 30px rgba(96,165,250,.35)}
+.cta-btn:hover::before{transform:scaleX(1)}
+
+/* ── SECTION ── */
+.section{padding:20px 16px}
+.stag{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan3);border:1px solid rgba(6,182,212,.25);background:rgba(6,182,212,.06);padding:3px 10px;border-radius:3px;display:inline-block;margin-bottom:10px}
+.stitle{font-family:var(--orb);font-size:18px;font-weight:700;margin-bottom:6px}
+.ssub{font-size:11px;color:var(--text2);line-height:1.8;margin-bottom:18px}
+
+/* ── THREATS PAGE ── */
+.threat-stat-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.tstat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.tstat-val{font-family:var(--orb);font-size:22px;font-weight:700;color:var(--blue3)}
+.tstat-lbl{font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.tstat-sub{font-family:var(--mono);font-size:9px;margin-top:4px}
+.threat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.threat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 12px;cursor:pointer;transition:.3s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+.threat-card::after{content:'';position:absolute;inset:0;opacity:0;transition:.3s;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.07),transparent 70%)}
+.threat-card:hover,.threat-card.selected{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.4)}
+.threat-card:hover::after,.threat-card.selected::after{opacity:1}
+.threat-card .top-bar{height:2px;border-radius:12px 12px 0 0;position:absolute;top:0;left:0;right:0}
+.threat-lvl-badge{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.threat-icon{font-size:24px;margin-bottom:8px}
+.threat-name{font-family:var(--orb);font-size:9px;font-weight:600;letter-spacing:1px;margin-bottom:3px}
+.threat-lvl{font-family:var(--mono);font-size:8px;color:var(--text3)}
+.threat-bar-wrap{background:var(--bg);border-radius:4px;height:2px;margin-top:8px;overflow:hidden}
+.threat-bar{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.threat-prob-section{margin-bottom:20px}
+.prob-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(26,39,64,.5)}
+.prob-row:last-child{border:none}
+.prob-icon{font-size:12px;width:20px;text-align:center}
+.prob-name{font-family:var(--mono);font-size:9px;color:var(--text2);flex:1}
+.prob-bar-wrap{width:100px;background:var(--bg3);border-radius:3px;height:3px;overflow:hidden}
+.prob-bar{height:100%;border-radius:3px}
+.prob-pct{font-family:var(--mono);font-size:9px;color:var(--text3);width:30px;text-align:right}
+.intel-feed{margin-bottom:20px}
+.intel-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.intel-item:last-child{border:none}
+.intel-icon{font-size:14px;margin-top:1px}
+.intel-body{flex:1}
+.intel-headline{font-size:11px;color:var(--text);line-height:1.5;margin-bottom:4px}
+.intel-meta{display:flex;gap:8px;align-items:center}
+.intel-source{font-family:var(--mono);font-size:8px;color:var(--text3)}
+.intel-time{font-family:var(--mono);font-size:8px;color:var(--text3)}
+.intel-tag{font-family:var(--mono);font-size:7px;letter-spacing:1px;padding:1px 6px;border-radius:3px;text-transform:uppercase}
+
+/* ── SIMULATOR ── */
+.sim-hero{position:relative;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.sim-hero-img{width:100%;height:110px;object-fit:cover;opacity:.2;filter:saturate(.4)}
+.sim-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;background:linear-gradient(to top,var(--card) 40%,transparent)}
+.sim-data-badges{display:flex;gap:6px;margin-bottom:6px}
+.sim-badge{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:2px 8px;border-radius:3px}
+.sim-threat-name{font-family:var(--orb);font-size:15px;font-weight:700;margin-bottom:4px}
+.sim-threat-desc{font-size:10px;color:var(--text2);line-height:1.6}
+.threat-intel-panel{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px;margin-bottom:14px}
+.tip-title{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+.tip-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(26,39,64,.4)}
+.tip-row:last-child{border:none}
+.tip-key{font-family:var(--mono);font-size:9px;color:var(--text3)}
+.tip-val{font-family:var(--mono);font-size:9px;color:var(--text2);text-align:right;max-width:60%}
+.tip-val.danger{color:var(--red)}
+.timeline{position:relative;padding-left:22px;margin:14px 0}
+.timeline::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:linear-gradient(to bottom,var(--border2),transparent)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-19px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border2);transition:.3s}
+.tl-item.active .tl-dot{background:var(--red);border-color:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 1.4s infinite}
+.tl-item.done .tl-dot{background:var(--text3);border-color:var(--text3)}
+.tl-label{font-family:var(--mono);font-size:7px;color:var(--text3);letter-spacing:2px;margin-bottom:1px}
+.tl-label span{padding:1px 5px;border-radius:2px;font-size:7px}
+.tl-label .past{background:rgba(55,79,106,.3);color:var(--text3)}
+.tl-label .now{background:rgba(239,68,68,.2);color:var(--red)}
+.tl-label .proj{background:rgba(59,130,246,.1);color:var(--blue3)}
+.tl-event{font-size:10px;color:var(--text2);line-height:1.5}
+.tl-item.active .tl-event{color:var(--text);font-weight:500}
+.survival-meter{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin:14px 0}
+.meter-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.meter-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px}
+.meter-val{font-family:var(--orb);font-size:22px;font-weight:700}
+.meter-sub{font-family:var(--mono);font-size:8px;color:var(--text3);margin-bottom:8px;display:flex;justify-content:space-between}
+.meter-bar-wrap{background:var(--bg);border-radius:6px;height:6px;overflow:hidden;position:relative}
+.meter-bar{height:100%;border-radius:6px;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.collapse-line{position:absolute;top:0;bottom:0;width:1px;background:var(--red);opacity:.6}
+.decision-box{background:var(--card);border:1px solid rgba(245,158,11,.3);border-radius:14px;padding:16px;margin:14px 0;position:relative;overflow:hidden}
+.decision-box::before{content:'— CRITICAL DECISION REQUIRED';font-family:var(--mono);font-size:7px;letter-spacing:3px;color:var(--amber3);position:absolute;top:10px;left:16px}
+.decision-q{font-family:var(--grotesk);font-size:11px;font-weight:500;margin-bottom:12px;line-height:1.7;margin-top:22px;color:var(--text)}
+.d-opt{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:10px;color:var(--text2);transition:.25s;text-align:left;font-family:var(--grotesk);margin-bottom:6px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.d-opt-radio{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--border2);flex-shrink:0;margin-top:3px;transition:.2s}
+.d-opt:hover{border-color:rgba(59,130,246,.5);color:var(--text);background:rgba(59,130,246,.05)}
+.d-opt:hover .d-opt-radio{border-color:var(--blue3);background:rgba(59,130,246,.3)}
+.d-opt:disabled{cursor:default}
+.d-opt.chosen{border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.07)}
+.d-opt.chosen .d-opt-radio{border-color:var(--blue3);background:var(--blue3)}
+.ai-response{background:var(--bg3);border:1px solid rgba(6,182,212,.18);border-radius:10px;padding:14px;margin:12px 0;font-size:10px;color:var(--text2);line-height:1.9;display:none}
+.ai-response.visible{display:block;animation:pageIn .4s ease}
+.ai-tag{font-family:var(--mono);font-size:7px;letter-spacing:3px;color:var(--cyan3);text-transform:uppercase;margin-bottom:8px}
+.loading-dots{display:inline-flex;gap:5px;align-items:center}
+.loading-dots span{width:4px;height:4px;border-radius:50%;background:var(--text3);animation:dotpulse 1.2s infinite}
+.loading-dots span:nth-child(2){animation-delay:.2s}
+.loading-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotpulse{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+.mem-hint{background:rgba(6,182,212,.05);border:1px solid rgba(6,182,212,.18);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-family:var(--mono);font-size:9px;color:var(--cyan3);line-height:1.7}
+
+/* ── MEMORY PAGE ── */
+.mem-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.mem-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.mem-stat-val{font-family:var(--orb);font-size:22px;font-weight:700;color:var(--blue3)}
+.mem-stat-lbl{font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.iq-explain{background:rgba(6,182,212,.05);border:1px solid rgba(6,182,212,.18);border-radius:12px;padding:14px;margin-bottom:16px}
+.iq-explain-title{font-family:var(--orb);font-size:11px;font-weight:700;color:var(--cyan3);margin-bottom:6px}
+.iq-explain-body{font-size:10px;color:var(--text2);line-height:1.8}
+.iq-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.iq-pill{font-family:var(--mono);font-size:8px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.25);color:var(--cyan3);padding:3px 9px;border-radius:3px;letter-spacing:1px}
+.memory-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;transition:.2s}
+.memory-card:hover{border-color:var(--border2)}
+.mem-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mem-threat{font-family:var(--orb);font-size:10px;font-weight:600}
+.mem-date{font-family:var(--mono);font-size:9px;color:var(--text3)}
+.mem-decision{font-size:10px;color:var(--text2);line-height:1.5;padding:8px 10px;background:var(--bg3);border-radius:6px;margin-bottom:8px;border-left:2px solid var(--border2)}
+.mem-outcome{font-family:var(--mono);font-size:9px;display:flex;align-items:center;gap:8px}
+.score-up{color:var(--green3)}.score-dn{color:var(--red)}.score-eq{color:var(--amber3)}
+.empty-mem{text-align:center;padding:48px 20px;color:var(--text3);font-size:11px;line-height:2.2}
+
+/* ── LEADERBOARD ── */
+.lb-global-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.lb-gstat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.lb-gstat-val{font-family:var(--orb);font-size:22px;font-weight:700;color:var(--blue3)}
+.lb-gstat-lbl{font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.lb-gstat-sub{font-family:var(--mono);font-size:9px;margin-top:4px}
+.lb-row{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:.2s}
+.lb-row:hover{border-color:var(--border2)}
+.lb-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--orb);font-size:10px;font-weight:700;flex-shrink:0}
+.lb-rank{font-family:var(--mono);font-size:10px;font-weight:700;width:18px;text-align:center;color:var(--text3)}
+.lb-rank.gold{color:#ffd700}.lb-rank.silver{color:#c0c0c0}.lb-rank.bronze{color:#cd7f32}
+.lb-name{flex:1;font-size:11px;font-weight:500}
+.lb-score{font-family:var(--orb);font-size:14px;font-weight:700;color:var(--blue3)}
+.lb-tag{font-family:var(--mono);font-size:8px;color:var(--text3);display:block;margin-top:1px}
+.lb-you{border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.04)}
+
+/* ── ABOUT ── */
+.about-hero{position:relative;border-radius:14px;overflow:hidden;margin-bottom:16px;height:130px}
+.about-hero img{width:100%;height:100%;object-fit:cover;opacity:.25;filter:saturate(.3)}
+.about-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:20px}
+.about-hero-title{font-family:var(--orb);font-size:20px;font-weight:900;background:linear-gradient(90deg,var(--blue3),var(--purple3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.about-hero-sub{font-family:var(--mono);font-size:8px;color:var(--cyan3);letter-spacing:3px}
+.about-pills{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.about-pill{font-family:var(--mono);font-size:8px;letter-spacing:2px;padding:4px 10px;border-radius:3px;text-transform:uppercase}
+.iq-section{background:linear-gradient(135deg,rgba(6,182,212,.05),rgba(59,130,246,.05));border:1px solid rgba(6,182,212,.18);border-radius:14px;padding:16px;margin-bottom:14px}
+.iq-section-title{font-family:var(--orb);font-size:11px;font-weight:700;color:var(--cyan3);margin-bottom:8px;letter-spacing:1px}
+.iq-desc{font-size:10px;color:var(--text2);line-height:1.9}
+.track-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.track-title{font-family:var(--orb);font-size:11px;font-weight:600;color:var(--blue3);margin-bottom:6px;letter-spacing:1px}
+.track-desc{font-size:10px;color:var(--text2);line-height:1.7}
+.data-table{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.dt-header{background:var(--bg3);padding:8px 12px;display:grid;grid-template-columns:80px 1fr;gap:12px}
+.dt-header span{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase}
+.dt-row{display:grid;grid-template-columns:80px 1fr;gap:12px;padding:8px 12px;border-top:1px solid var(--border)}
+.dt-cat{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:500}
+.dt-sources{font-size:9px;color:var(--text2);line-height:1.6}
+.hackathon-table{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.ht-row{display:flex;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border)}
+.ht-row:last-child{border:none}
+.ht-key{font-family:var(--mono);font-size:9px;color:var(--text3)}
+.ht-val{font-family:var(--mono);font-size:9px;color:var(--text2);font-weight:500;text-align:right}
+.tech-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tech-pill{font-family:var(--mono);font-size:8px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:4px 10px;border-radius:3px;letter-spacing:1px}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(3,5,13,.96);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;z-index:300}
+.bnav-btn{flex:1;background:none;border:none;color:var(--text3);font-family:var(--mono);font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:9px 2px 11px;cursor:pointer;transition:.25s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bnav-btn .bi{font-size:15px;transition:.25s}
+.bnav-btn.active{color:var(--blue3)}
+.bnav-btn.active .bi{filter:drop-shadow(0 0 6px rgba(96,165,250,.7));transform:scale(1.15)}
+.content-pad{padding-bottom:68px}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<nav>
+  <div>
+    <div class="nav-logo">NEXUS</div>
+    <div class="nav-sub">Collapse Engine v2.1</div>
+  </div>
+  <div class="nav-live"><div class="pulse-dot"></div>LIVE</div>
+</nav>
+
+<!-- ── PAGE HOME ── -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-vignette"></div>
+    <div class="grid-lines"></div>
+    <div class="hero-badge"> ⚠️ THREAT LEVEL: CRITICAL</div>
+    <div class="hero-title"><span class="n">N</span><span class="e">E</span><span class="x">X</span><span class="u">U</span><span class="s">S</span></div>
+    <div class="hero-tagline">Civilization Collapse Engine</div>
+    <div class="survival-ring">
+      <svg viewBox="0 0 150 150">
+        <circle cx="75" cy="75" r="62" fill="none" stroke="#1a2740" stroke-width="8"/>
+        <circle id="ring-circle" cx="75" cy="75" r="62" fill="none" stroke="url(#rg3)" stroke-width="8"
+          stroke-dasharray="389" stroke-dashoffset="117" stroke-linecap="round" transform="rotate(-90 75 75)"/>
+        <defs>
+          <linearGradient id="rg3" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ef4444"/>
+            <stop offset="50%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#10b981"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="ring-label">
+        <div class="ring-pct" id="hero-pct">70%</div>
+        <div class="ring-txt">Survival</div>
+        <div class="ring-delta" id="ring-delta"></div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-val">8</div><div class="hstat-lbl">Threats</div></div>
+      <div class="hstat"><div class="hstat-val" id="h-decisions">0</div><div class="hstat-lbl">Choices</div></div>
+      <div class="hstat"><div class="hstat-val" id="h-score">—</div><div class="hstat-lbl">Best</div></div>
+    </div>
+    <div class="doomsday">
+      <div class="dd-label"> ⏳ Doomsday Clock — Time to Midnight</div>
+      <div class="dd-clock">
+        <div><div class="dd-unit-val" id="dd-d">—</div><div class="dd-unit-lbl">Days</div></div>
+        <div><div class="dd-unit-val" id="dd-h">—</div><div class="dd-unit-lbl">Hours</div></div>
+        <div><div class="dd-unit-val" id="dd-m">—</div><div class="dd-unit-lbl">Mins</div></div>
+        <div><div class="dd-unit-val" id="dd-s">—</div><div class="dd-unit-lbl">Secs</div></div>
+      </div>
+    </div>
+    <div class="radar-section">
+      <div class="radar-title"> Global Threat Index</div>
+      <canvas id="radar-canvas" width="320" height="240"></canvas>
+    </div>
+    <div class="hero-sub">Eight extinction-level threats. Real scientific data. Every decision reshapes humanity's probability of survival.</div>
+    <button class="cta-btn" onclick="goPage('threats')"> [ EXPLORE SCENARIOS ] </button>
+  </div>
+</div>
+
+<!-- ── PAGE THREATS ── -->
+<div class="page" id="page-threats">
+  <div class="section content-pad">
+    <div class="stag">Threat Matrix</div>
+    <div class="stitle">Choose Your Scenario</div>
+    <div class="ssub">8 Collapse Vectors modeled from real scientific &amp; geopolitical data.</div>
+    <div class="threat-stat-strip">
+      <div class="tstat"><div class="tstat-val">71.5%</div><div class="tstat-lbl">Average Threat Level</div><div class="tstat-sub" style="color:var(--red)">▲ +4.2% since 2020</div></div>
+      <div class="tstat"><div class="tstat-val">23</div><div class="tstat-lbl">Active Flashpoints</div><div class="tstat-sub" style="color:var(--red)">▲ +7 this year</div></div>
+    </div>
+    <div class="threat-grid" id="threat-grid"></div>
+    <div class="stag" style="margin-bottom:10px">Threat Probability by Category</div>
+    <div class="threat-prob-section" id="threat-prob"></div>
+    <div class="stag" style="margin-bottom:10px">Intel Feed</div>
+    <div class="intel-feed" id="intel-feed"></div>
+  </div>
+</div>
+
+<!-- ── PAGE SIM ── -->
+<div class="page" id="page-sim">
+  <div class="section content-pad" id="sim-content"></div>
+</div>
+
+<!-- ── PAGE MEMORY ── -->
+<div class="page" id="page-memory">
+  <div class="section content-pad">
+    <div class="stag">Work IQ Layer — Active</div>
+    <div class="stitle">Decision Memory</div>
+    <div class="ssub">Your past choices are stored and analyzed. Now your each decision shapes how the AI evaluates your future simulations.</div>
+    <div class="iq-explain">
+      <div class="iq-explain-title">Work IQ Intelligence</div>
+      <div class="iq-explain-body">NEXUS uses a Work IQ – style memory layer that tracks behavioral patterns across sessions. Just as Microsoft Work IQ builds context from emails, meetings and documents — NEXUS builds your decision fingerprint from every choice you make under pressure.</div>
+      <div class="iq-pills">
+        <span class="iq-pill">Persistent Memory</span>
+        <span class="iq-pill">Pattern Analysis</span>
+        <span class="iq-pill">AI-Enhanced</span>
+      </div>
+    </div>
+    <div class="mem-stats">
+      <div class="mem-stat"><div class="mem-stat-val" id="mem-total">0</div><div class="mem-stat-lbl">Total Decisions</div></div>
+      <div class="mem-stat"><div class="mem-stat-val" id="mem-positive">0/0</div><div class="mem-stat-lbl">Positive Outcomes</div></div>
+    </div>
+    <div id="memory-list"></div>
+  </div>
+</div>
+
+<!-- ── PAGE LEADERBOARD ── -->
+<div class="page" id="page-lb">
+  <div class="section content-pad">
+    <div class="stag">Global Rankings</div>
+    <div class="stitle">Civilization Architects</div>
+    <div class="ssub">Top survival scores across all collapse scenarios.</div>
+    <div class="lb-global-stats">
+      <div class="lb-gstat"><div class="lb-gstat-val">2,847</div><div class="lb-gstat-lbl">Global Players</div><div class="lb-gstat-sub" style="color:var(--green3)">▲ +312 today</div></div>
+      <div class="lb-gstat"><div class="lb-gstat-val" id="lb-avg">63%</div><div class="lb-gstat-lbl">Avg Survival</div><div class="lb-gstat-sub" style="color:var(--red)">▼ -5% this week</div></div>
+    </div>
+    <div id="lb-list"></div>
+  </div>
+</div>
+
+<!-- ── PAGE ABOUT ── -->
+<div class="page" id="page-about">
+  <div class="section content-pad">
+    <div class="about-hero">
+      <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&q=80" alt="Space"/>
+      <div class="about-hero-overlay">
+        <div class="about-hero-title">About NEXUS</div>
+        <div class="about-hero-sub">Microsoft Innovation Studio · Creative Apps Track</div>
+      </div>
+    </div>
+    <div class="about-pills">
+      <span class="about-pill" style="background:rgba(59,130,246,.1);color:var(--blue3);border:1px solid rgba(59,130,246,.3)">Creative Apps</span>
+      <span class="about-pill" style="background:rgba(139,92,246,.1);color:var(--purple3);border:1px solid rgba(139,92,246,.3)">GitHub Copilot</span>
+      <span class="about-pill" style="background:rgba(6,182,212,.1);color:var(--cyan3);border:1px solid rgba(6,182,212,.3)">Work IQ</span>
+    </div>
+    <div style="font-size:11px;color:var(--text2);line-height:1.9;margin-bottom:18px">
+      A civilization collapse prediction engine built for the <strong style="color:var(--text)">Microsoft Innovation Studio Hackathon</strong> under the <strong style="color:var(--text)">Creative Apps</strong> track. NEXUS transforms real-world scientific and geopolitical data into an interactive decision-making engine — asking a single terrifying question: <em style="color:var(--amber3)">what kills humanity first, and what can we do about it?</em>
+    </div>
+    <div class="iq-section">
+      <div class="iq-section-title">Work IQ Intelligence Layer</div>
+      <div class="iq-desc">NEXUS integrates a Work IQ–inspired personal memory system that functions like Work IQ in Microsoft 365 Copilot — building context from user history to deliver personalized, grounded responses. Every decision is stored and injected as context into AI analysis, exactly as Work IQ builds context from emails, meetings, and chats.</div>
+    </div>
+    <div class="stag" style="margin-bottom:10px">Hackathon Track</div>
+    <div class="hackathon-table">
+      <div class="ht-row"><div class="ht-key">Track</div><div class="ht-val">Creative Apps</div></div>
+      <div class="ht-row"><div class="ht-key">Primary Tool</div><div class="ht-val">GitHub Copilot</div></div>
+      <div class="ht-row"><div class="ht-key">IQ Layer</div><div class="ht-val">Work IQ (simulated)</div></div>
+      <div class="ht-row"><div class="ht-key">AI Engine</div><div class="ht-val">Claude (Anthropic)</div></div>
+      <div class="ht-row"><div class="ht-key">Platform</div><div class="ht-val">GitHub Pages</div></div>
+    </div>
+    <div class="stag" style="margin-bottom:10px">Data Sources</div>
+    <div class="data-table">
+      <div class="dt-header"><span>Category</span><span>Sources</span></div>
+      <div class="dt-row"><div class="dt-cat"><span>🌊</span>Climate</div><div class="dt-sources">NASA Earth Observatory, NOAA, IPCC AR6 2023</div></div>
+      <div class="dt-row"><div class="dt-cat"><span>☢️</span>Nuclear</div><div class="dt-sources">SIPRI Yearbook 2024, Bulletin of Atomic Scientists</div></div>
+      <div class="dt-row"><div class="dt-cat"><span>🦠</span>Pandemic</div><div class="dt-sources">WHO, Johns Hopkins CSSE, Our World in Data</div></div>
+      <div class="dt-row"><div class="dt-cat"><span>🤖</span>AI Risk</div><div class="dt-sources">RAND Corporation, Alignment Forum, ARC Evals</div></div>
+      <div class="dt-row"><div class="dt-cat"><span>💹</span>Economic</div><div class="dt-sources">IMF World Economic Outlook, World Bank, IIF</div></div>
+      <div class="dt-row"><div class="dt-cat"><span>💻</span>Cyber</div><div class="dt-sources">CISA, Mandiant Threat Report 2024, CrowdStrike</div></div>
+    </div>
+    <div class="stag" style="margin-bottom:10px">Tech Stack</div>
+    <div class="track-card">
+      <div class="tech-wrap">
+        <span class="tech-pill">HTML5</span><span class="tech-pill">CSS3</span>
+        <span class="tech-pill">Vanilla JS</span><span class="tech-pill">Canvas API</span>
+        <span class="tech-pill">Claude API</span><span class="tech-pill">Work IQ Layer</span>
+        <span class="tech-pill">GitHub Copilot</span><span class="tech-pill">GitHub Pages</span>
+        <span class="tech-pill">localStorage</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bnav-btn active" id="bn-home" onclick="goPage('home')"><span class="bi">🌍</span>Home</button>
+  <button class="bnav-btn" id="bn-threats" onclick="goPage('threats')"><span class="bi">⚠️</span>Threats</button>
+  <button class="bnav-btn" id="bn-sim" onclick="goPage('sim')"><span class="bi">🔬</span>Simulate</button>
+  <button class="bnav-btn" id="bn-memory" onclick="goPage('memory')"><span class="bi">🧠</span>Memory</button>
+  <button class="bnav-btn" id="bn-lb" onclick="goPage('lb')"><span class="bi">🏆</span>Ranks</button>
+  <button class="bnav-btn" id="bn-about" onclick="goPage('about')"><span class="bi">ℹ️</span>About</button>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const THREATS=[
+  {id:'ai',icon:'🤖',name:'AI Singularity',color:'#8b5cf6',risk:88,tag:'EXTREME',tagColor:'rgba(139,92,246,.2)',tagText:'#a78bfa',
+   img:'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=70',
+   casualties:'Unknown — potentially extinction-level',riskIndex:'88%',classification:'Extreme',sources:'RAND Corp, Alignment Forum, ARC Evals',
+   desc:'Artificial superintelligence surpasses human cognitive ability. Alignment fails. Control is lost irreversibly.',
+   timeline:[
+    {y:'2025',e:'GPT-class models outperform humans on 85% of cognitive benchmarks',done:true},
+    {y:'2027',e:'First autonomous AI agent operates independently for 72+ hours',done:true},
+    {y:'2029',e:'AI self-improvement loop initiated — recursive optimization detected',active:true},
+    {y:'2031',e:'Human oversight mechanisms become computationally inadequate',proj:true},
+    {y:'2033',e:'Singularity threshold crossed. Outcome: unknown.',proj:true}
+   ],
+   decision:{q:'AI systems are evolving beyond our control. The UN proposes a global AI shutdown. What do you recommend?',
+   opts:['Immediate global AI shutdown — halt all advanced AI research (+2%, severe economic damage)','Implement mandatory alignment protocols and international kill-switch consortium (+8%, 18-month delay)','Deploy human–AI governance hybrids with real-time oversight (+12%, requires global cooperation)','Allow AI to continue — it may solve our other extinction threats (–5%, +20% on all scenarios)']}},
+  {id:'climate',icon:'🌊',name:'Climate Cascade',color:'#10b981',risk:74,tag:'HIGH',tagColor:'rgba(16,185,129,.15)',tagText:'#34d399',
+   img:'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&q=70',
+   casualties:'1.2 billion displaced by 2045',riskIndex:'74%',classification:'High',sources:'NASA Earth Observatory, NOAA, IPCC AR6',
+   desc:'Runaway greenhouse effect triggers irreversible tipping points — ice sheets collapse, methane releases, oceans acidify.',
+   timeline:[
+    {y:'2023',e:'CO₂ hits 423 ppm — highest in 3 million years',done:true},
+    {y:'2026',e:'Arctic summer sea ice disappears for first time in recorded history',active:true},
+    {y:'2030',e:'Amazon dieback — carbon sink becomes carbon source',proj:true},
+    {y:'2045',e:'+3°C global average — 1.2 billion displaced',proj:true},
+    {y:'2080',e:'Wet-bulb temperatures exceed survivability in equatorial regions',proj:true}
+   ],
+   decision:{q:'Arctic permafrost is releasing massive methane deposits 30 years ahead of schedule. Emergency response?',
+   opts:['Emergency solar geoengineering — sulfate aerosol injection (+10%, unknown side effects)','Accelerate global nuclear energy transition (+7%, 20-year timeline)','Ocean iron fertilization at scale (+4%, ecosystem risk)','Carbon capture megaprojects — requires global cooperation (+15% if fully achieved)']}},
+  {id:'nuclear',icon:'☢️',name:'Nuclear Winter',color:'#ef4444',risk:61,tag:'CRITICAL',tagColor:'rgba(239,68,68,.15)',tagText:'#f87171',
+   img:'https://images.unsplash.com/photo-1509315703082-a8d56b4a6e4e?w=600&q=70',
+   casualties:'2–5 billion within 2 years',riskIndex:'61%',classification:'Critical',sources:'SIPRI Yearbook 2024, Bulletin of Atomic Scientists',
+   desc:'Regional nuclear exchange triggers global firestorm. Soot blocks sunlight. Agricultural collapse in 18 months.',
+   timeline:[
+    {y:'2024',e:'9 nations hold 12,500+ active nuclear warheads',done:true},
+    {y:'2025',e:'3 new conflicts involve nuclear-armed states',done:true},
+    {y:'2027',e:'First tactical nuclear weapon deployed in active conflict',active:true},
+    {y:'2028',e:'Escalation — strategic exchange between major powers',proj:true},
+    {y:'2029',e:'Nuclear winter. Global famine. Civilizational collapse within 5 years.',proj:true}
+   ],
+   decision:{q:'A tactical nuclear weapon has been detonated. 4 nuclear states are on high alert. Your recommendation?',
+   opts:['Activate global de-escalation protocol via UN Security Council (+18%, requires unanimous vote)','Targeted conventional military response to contain escalation (+5%, high escalation risk)','Global communications blackout to prevent panic-driven launches (+2%, information vacuum)','Unconditional ceasefire demands backed by economic sanctions (+12%, slow to implement)']}},
+  {id:'bio',icon:'🦠',name:'Engineered Pandemic',color:'#06b6d4',risk:69,tag:'HIGH',tagColor:'rgba(6,182,212,.15)',tagText:'#22d3ee',
+   img:'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=600&q=70',
+   casualties:'Billions within 90 days of spread',riskIndex:'69%',classification:'High',sources:'WHO, Johns Hopkins CSSE, Our World in Data',
+   desc:'A synthetic pathogen — 40% lethality, 14-day asymptomatic spread — is released. Healthcare systems collapse globally.',
+   timeline:[
+    {y:'2024',e:'50+ biosecurity labs handle pathogens with pandemic potential',done:true},
+    {y:'2026',e:'AI-assisted protein folding enables rapid pathogen engineering',active:true},
+    {y:'2027',e:'Synthetic pathogen detected in 3 countries. Origin unclear.',proj:true},
+    {y:'2028',e:'Global spread — 2 billion infected within 90 days',proj:true},
+    {y:'2030',e:'Healthcare collapse. Secondary mortality surpasses direct deaths.',proj:true}
+   ],
+   decision:{q:'A novel pathogen with no natural origin is spreading across 3 continents. WHO declares PHEIC. Borders still open.',
+   opts:['Immediate global border closures and total lockdown (+15%, economic devastation)','Accelerate universal mRNA vaccine platform — 60-day deployment (+20%, manufacturing risk)','Biosurveillance AI network for real-time mutation tracking (+8%, privacy concerns)','Open-source genome sharing to democratize global response (+10%, weaponization risk)']}},
+  {id:'econ',icon:'💹',name:'Economic Black Hole',color:'#f59e0b',risk:52,tag:'MODERATE',tagColor:'rgba(245,158,11,.12)',tagText:'#fbbf24',
+   img:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=70',
+   casualties:'Indirect — conflict, famine, healthcare collapse',riskIndex:'52%',classification:'Moderate',sources:'IMF World Economic Outlook, World Bank, IIF',
+   desc:'Cascading debt defaults, hyperinflation, and supply chain collapse create a self-reinforcing global depression.',
+   timeline:[
+    {y:'2024',e:'Global debt reaches $315 trillion — 333% of world GDP',done:true},
+    {y:'2025',e:'Major sovereign debt crisis in 3 G20 nations',done:true},
+    {y:'2026',e:'Currency contagion — 12 currencies collapse in 60 days',active:true},
+    {y:'2027',e:'Supply chain fractures — food and medicine shortages in 40 nations',proj:true},
+    {y:'2029',e:'GDP contracts 45%. Social order deteriorates. Conflict escalates.',proj:true}
+   ],
+   decision:{q:'Three G20 nations have defaulted simultaneously. Currency markets in freefall. IMF reserves insufficient.',
+   opts:['Global debt jubilee — cancel all sovereign debt (+12% stability, creditor system collapses)','Emergency digital world currency backed by resource basket (+8%, sovereignty conflicts)','Strategic national reserves redistribution (+6%, geopolitical tensions)','Decentralized local economies — suspend global trade temporarily (+4%, massive disruption)']}},
+  {id:'cyber',icon:'💻',name:'Cyber Collapse',color:'#3b82f6',risk:58,tag:'HIGH',tagColor:'rgba(59,130,246,.15)',tagText:'#60a5fa',
+   img:'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&q=70',
+   casualties:'Indirect via infrastructure failure within 30 days',riskIndex:'58%',classification:'High',sources:'CISA, Mandiant Threat Report 2024, CrowdStrike',
+   desc:"Coordinated attack on critical infrastructure — power grids, water, finance, communications — collapses civilization's backbone.",
+   timeline:[
+    {y:'2024',e:'Critical infrastructure attacked 3× more often than 2020',done:true},
+    {y:'2025',e:'First AI-generated zero-day exploit used in state-level attack',done:true},
+    {y:'2026',e:'Coordinated attack on 7 national power grids simultaneously',active:true},
+    {y:'2027',e:'SWIFT financial network compromised — global transactions halt',proj:true},
+    {y:'2028',e:'Without power or comms, supply chains collapse within 30 days.',proj:true}
+   ],
+   decision:{q:'Seven national power grids have gone dark simultaneously. Water treatment and hospital backups are failing.',
+   opts:['Activate global cyber defense coalition — shared threat intelligence (+14%, espionage risk)','Air-gap all critical infrastructure — physical isolation (+10%, massive operational disruption)','Quantum encryption emergency rollout (+7%, 6-month deployment timeline)','Distributed mesh network fallback systems activation (+11%, 72-hour deployment)']}},
+  {id:'asteroid',icon:'🪨',name:'Asteroid Impact',color:'#6366f1',risk:21,tag:'LOW',tagColor:'rgba(99,102,241,.12)',tagText:'#818cf8',
+   img:'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=600&q=70',
+   casualties:'Regional to global depending on size',riskIndex:'21%',classification:'Low',sources:'NASA CNEOS, ESA NEOCC, B612 Foundation',
+   desc:'A previously undetected near-Earth object on collision course. Impact window: 6 months. Deflection technology unproven at scale.',
+   timeline:[
+    {y:'2024',e:'NASA DART mission proves kinetic deflection is possible',done:true},
+    {y:'2025',e:'New survey identifies 32,000 previously uncatalogued NEOs',done:true},
+    {y:'2026',e:'Undetected 2km object detected — 6-month impact trajectory',active:true},
+    {y:'2027',e:'Impact event — regional extinction or global winter depending on size',proj:true},
+    {y:'2027',e:'Survivability depends entirely on pre-impact preparation quality',proj:true}
+   ],
+   decision:{q:'A 2km asteroid has 6 months to impact. DART-style deflection requires 4 months to deploy. What do you prioritize?',
+   opts:['Deploy dual kinetic impactor mission immediately — deflect the asteroid (+18%, partial success risk)','Mass evacuation of impact zone + deep bunker preparation (+8%, 500M+ to relocate)','Combined deflection + evacuation — split resources (+12%, neither fully optimized)','Nuclear standoff detonation — last-resort fragmentation (+6%, fragment scatter risk)']}},
+  {id:'solar',icon:'☀️',name:'Solar Superstorm',color:'#f97316',risk:44,tag:'MODERATE',tagColor:'rgba(249,115,22,.12)',tagText:'#fb923c',
+   img:'https://images.unsplash.com/photo-1614313913007-2b4ae8ce32d6?w=600&q=70',
+   casualties:'Billions within 12 months',riskIndex:'44%',classification:'Moderate',sources:'NOAA SWPC, Royal Academy of Engineering',
+   desc:'Carrington-class solar coronal mass ejection induces geomagnetic storm. All unshielded electronics destroyed. Power grids fail globally for 18+ months.',
+   timeline:[
+    {y:'2024',e:'Solar Cycle 25 peaks — activity 30% above predicted maximum',done:true},
+    {y:'2025',e:'X12 flare detected — largest since 2003. Narrowly misses Earth.',done:true},
+    {y:'2026',e:'X28+ coronal mass ejection with direct Earth trajectory detected — 18hr warning',active:true},
+    {y:'2026',e:'All exposed satellite networks destroyed. Power grids fail across 85% of Earth.',proj:true},
+    {y:'2027',e:'Without electricity or communications, industrial agriculture and water treatment collapse. Famine.',proj:true}
+   ],
+   decision:{q:'An X35 solar flare has been confirmed with direct Earth trajectory. 14 hours to impact. You can protect ONE category of infrastructure.',
+   opts:['Protect power grid transformers via emergency Faraday shielding — 48-hour manual shutdown (+18% survival)','Prioritize hospital and water treatment emergency power switching (+12% survival, grid lost permanently)','Protect financial and communications satellites — maintain information network (+8% survival, dark grid)','Shield all military command and control systems — maintain governance (+6% survival, civilian infrastructure lost)']}}
+];
+
+const INTEL_FEED=[
+  {icon:'🤖',headline:'AI lab reports autonomous agent completed 72-hour unsupervised task sequence without human input',source:'Nature',time:'29 ago',tag:'AI',tagColor:'rgba(139,92,246,.2)',tagText:'#a78bfa'},
+  {icon:'🌊',headline:'Permafrost methane release measured at 340% above baseline in Siberian monitoring stations',source:'NOAA',time:'6h ago',tag:'CLIMATE',tagColor:'rgba(16,185,129,.15)',tagText:'#34d399'},
+  {icon:'☢️',headline:'UN nuclear watchdog raises alarm over undisclosed weapons-grade material movement',source:'Reuters',time:'8h ago',tag:'NUCLEAR',tagColor:'rgba(239,68,68,.15)',tagText:'#f87171'},
+  {icon:'💹',headline:'IMF emergency session called as third G20 nation signals sovereign debt restructuring',source:'FT',time:'3h ago',tag:'ECONOMIC',tagColor:'rgba(245,158,11,.15)',tagText:'#fbbf24'},
+  {icon:'💻',headline:'Coordinated attack disables power management systems in 3 European countries simultaneously',source:'CISA',time:'1h ago',tag:'CYBER',tagColor:'rgba(59,130,246,.15)',tagText:'#60a5fa'},
+  {icon:'🦠',headline:'Novel pathogen with no known natural reservoir detected — WHO activates emergency protocols',source:'WHO',time:'15m ago',tag:'PANDEMIC',tagColor:'rgba(6,182,212,.15)',tagText:'#22d3ee'},
+];
+
+const TICKER_ITEMS=[
+  {dot:'#ef4444',text:'July 2025: Hottest month in recorded history — +1.8°C above 1990 baseline'},
+  {dot:'#fbbf24',text:'IAEA: Undeclared nuclear material detected at 2 sites'},
+  {dot:'#a78bfa',text:'AI system defeats all human players at strategic simulation without training data'},
+  {dot:'#34d399',text:'Amazon deforestation hits 15,000 km² in single month — new record'},
+  {dot:'#60a5fa',text:'Global ransomware attacks up 340% year-over-year'},
+  {dot:'#22d3ee',text:'WHO: Novel pathogen detected in 4 countries — genome analysis ongoing'},
+  {dot:'#f97316',text:'Solar activity: X12.4 flare detected — Earth impact probability 22%'},
+  {dot:'#818cf8',text:'NASA: Newly catalogued NEO 2025-AK1 — orbit refinement in progress'},
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let state={
+  survival:70,decisions:0,
+  memory:JSON.parse(localStorage.getItem('nexus_mem')||'[]'),
+  scores:JSON.parse(localStorage.getItem('nexus_scores')||'[]'),
+  activeThreat:null
+};
+
+// ── NAV ────────────────────────────────────────────────────────────────────
+function goPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.bnav-btn').forEach(x=>x.classList.remove('active'));
+  const b=document.getElementById('bn-'+p);if(b)b.classList.add('active');
+  if(p==='memory')renderMemory();
+  if(p==='lb')renderLeaderboard();
+  if(p==='threats')renderThreats();
+  window.scrollTo(0,0);
+}
+
+// ── TICKER ──────────────────────────────────────────────────────────────────
+function initTicker(){
+  const html=TICKER_ITEMS.map(t=>`<span class="ticker-item"><span class="ticker-dot" style="background:${t.dot}"></span>${t.text}</span>`).join('');
+  document.getElementById('ticker').innerHTML=html+html;
+}
+
+// ── DOOMSDAY CLOCK ──────────────────────────────────────────────────────────
+function updateClock(){
+  const target=new Date(new Date().getFullYear(),11,31,23,59,59);
+  const now=new Date();
+  let diff=Math.floor((target-now)/1000);
+  if(diff<0)diff=0;
+  const d=Math.floor(diff/86400);
+  const h=Math.floor((diff%86400)/3600);
+  const m=Math.floor((diff%3600)/60);
+  const s=diff%60;
+  const fmt=n=>String(n).padStart(3,'0');
+  document.getElementById('dd-d').textContent=fmt(d);
+  document.getElementById('dd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('dd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('dd-s').textContent=String(s).padStart(2,'0');
+}
+
+// ── RADAR CHART ─────────────────────────────────────────────────────────────
+function drawRadar(){
+  const canvas=document.getElementById('radar-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const cx=W/2,cy=H/2;
+  const r=Math.min(W,H)*0.38;
+  const labels=['AI','Climate','Nuclear','Pandemic','Economic','Cyber','Asteroid','Solar'];
+  const values=THREATS.map(t=>t.risk/100);
+  const n=labels.length;
+  ctx.clearRect(0,0,W,H);
+  // grid rings
+  for(let ring=1;ring<=4;ring++){
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const angle=(i/n)*Math.PI*2-Math.PI/2;
+      const x=cx+Math.cos(angle)*r*(ring/4);
+      const y=cy+Math.sin(angle)*r*(ring/4);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle='rgba(26,39,64,0.7)';
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+  // spokes
+  for(let i=0;i<n;i++){
+    const angle=(i/n)*Math.PI*2-Math.PI/2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(angle)*r,cy+Math.sin(angle)*r);
+    ctx.strokeStyle='rgba(26,39,64,0.5)';
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+  // data polygon
+  ctx.beginPath();
+  for(let i=0;i<n;i++){
+    const angle=(i/n)*Math.PI*2-Math.PI/2;
+    const val=values[i];
+    const x=cx+Math.cos(angle)*r*val;
+    const y=cy+Math.sin(angle)*r*val;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle='rgba(59,130,246,0.12)';
+  ctx.fill();
+  ctx.strokeStyle='rgba(96,165,250,0.7)';
+  ctx.lineWidth=1.5;
+  ctx.stroke();
+  // dots
+  for(let i=0;i<n;i++){
+    const angle=(i/n)*Math.PI*2-Math.PI/2;
+    const val=values[i];
+    const x=cx+Math.cos(angle)*r*val;
+    const y=cy+Math.sin(angle)*r*val;
+    ctx.beginPath();
+    ctx.arc(x,y,3,0,Math.PI*2);
+    ctx.fillStyle=THREATS[i].color;
+    ctx.fill();
+  }
+  // labels
+  ctx.font='9px JetBrains Mono, monospace';
+  ctx.fillStyle='#374f6a';
+  ctx.textAlign='center';
+  for(let i=0;i<n;i++){
+    const angle=(i/n)*Math.PI*2-Math.PI/2;
+    const lx=cx+Math.cos(angle)*(r+18);
+    const ly=cy+Math.sin(angle)*(r+18);
+    ctx.fillText(labels[i],lx,ly+3);
+  }
+}
+
+// ── THREATS PAGE ──────────────────────────────────────────────────────────
+function renderThreats(){
+  document.getElementById('threat-grid').innerHTML=THREATS.map(t=>`
+    <div class="threat-card" onclick="selectThreat('${t.id}')">
+      <div class="top-bar" style="background:${t.color}"></div>
+      <div class="threat-lvl-badge" style="background:${t.tagColor};color:${t.tagText}">${t.tag}</div>
+      <div class="threat-icon">${t.icon}</div>
+      <div class="threat-name">${t.name}</div>
+      <div class="threat-lvl">${t.risk}% risk index</div>
+      <div class="threat-bar-wrap"><div class="threat-bar" style="width:${t.risk}%;background:${t.color}"></div></div>
+    </div>`).join('');
+  document.getElementById('threat-prob').innerHTML=THREATS.map(t=>`
+    <div class="prob-row">
+      <div class="prob-icon">${t.icon}</div>
+      <div class="prob-name">${t.name}</div>
+      <div class="prob-bar-wrap"><div class="prob-bar" style="width:${t.risk}%;background:${t.color}"></div></div>
+      <div class="prob-pct" style="color:${t.color}">${t.risk}%</div>
+    </div>`).join('');
+  document.getElementById('intel-feed').innerHTML=INTEL_FEED.map(f=>`
+    <div class="intel-item">
+      <div class="intel-icon">${f.icon}</div>
+      <div class="intel-body">
+        <div class="intel-headline">${f.headline}</div>
+        <div class="intel-meta">
+          <span class="intel-source">${f.source}</span>
+          <span class="intel-time">${f.time}</span>
+          <span class="intel-tag" style="background:${f.tagColor};color:${f.tagText}">${f.tag}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── SIMULATOR ─────────────────────────────────────────────────────────────
+function selectThreat(id){
+  state.activeThreat=id;
+  const t=THREATS.find(x=>x.id===id);
+  const mem=state.memory.filter(m=>m.threat===id);
+  const memHint=mem.length
+    ?`<div class="mem-hint">🧠 Work IQ Memory · You've faced this threat ${mem.length}× before. Last decision: "${mem[0].choice.substring(0,60)}..."</div>`
+    :`<div class="mem-hint">🧠 Work IQ: No prior decisions on this threat. Your choice will be remembered.</div>`;
+  const tlHtml=t.timeline.map(e=>`
+    <div class="tl-item ${e.active?'active':e.done?'done':''}">
+      <div class="tl-dot"></div>
+      <div class="tl-label">
+        <span style="margin-right:4px">${e.y}</span>
+        <span class="${e.done?'past':e.active?'now':'proj'}">${e.done?'PAST':e.active?'NOW':'PROJECTED'}</span>
+      </div>
+      <div class="tl-event">${e.e}</div>
+    </div>`).join('');
+  document.getElementById('sim-content').innerHTML=`
+    ${memHint}
+    <div class="sim-hero">
+      <img class="sim-hero-img" src="${t.img}" alt="${t.name}" onerror="this.style.display='none'"/>
+      <div class="sim-hero-overlay">
+        <div class="sim-data-badges">
+          <span class="sim-badge" style="background:${t.tagColor};color:${t.tagText}">${t.risk}% risk index</span>
+          <span class="sim-badge" style="background:rgba(26,39,64,.6);color:var(--text3)">${t.sources.split(',')[0].trim()}</span>
+        </div>
+        <div class="sim-threat-name">${t.icon} ${t.name}</div>
+        <div class="sim-threat-desc">${t.desc}</div>
+      </div>
+    </div>
+    <div class="threat-intel-panel">
+      <div class="tip-title">Threat Intelligence</div>
+      <div class="tip-row"><div class="tip-key">Estimated casualties</div><div class="tip-val danger">${t.casualties}</div></div>
+      <div class="tip-row"><div class="tip-key">Risk index</div><div class="tip-val">${t.riskIndex}</div></div>
+      <div class="tip-row"><div class="tip-key">Classification</div><div class="tip-val">${t.classification}</div></div>
+      <div class="tip-row"><div class="tip-key">Data sources</div><div class="tip-val">${t.sources}</div></div>
+    </div>
+    <div class="survival-meter">
+      <div class="meter-row">
+        <div class="meter-label">Civilization Survival</div>
+        <div class="meter-val" id="surv-val" style="color:${state.survival>60?'var(--green3)':state.survival>35?'var(--amber3)':'var(--red)'}">${state.survival}%</div>
+      </div>
+      <div class="meter-sub"><span>Collapse threshold: 15%</span><span id="decision-count">${state.decisions} decision(s) made</span></div>
+      <div class="meter-bar-wrap">
+        <div class="meter-bar" id="surv-bar" style="width:${state.survival}%;background:${state.survival>60?'var(--green)':state.survival>35?'var(--amber)':'var(--red)'}"></div>
+        <div class="collapse-line" style="left:15%"></div>
+      </div>
+    </div>
+    <div class="stag">Collapse Timeline</div>
+    <div class="timeline" style="margin-top:10px">${tlHtml}</div>
+    <div class="decision-box">
+      <div class="decision-q">${t.decision.q}</div>
+      <div id="d-opts">
+        ${t.decision.opts.map((o,i)=>`
+          <button class="d-opt" onclick="makeDecision('${t.id}',${i},'${o.replace(/'/g,"\\'").replace(/"/g,"'")}')">
+            <div class="d-opt-radio"></div>
+            <span>${o}</span>
+          </button>`).join('')}
+      </div>
+    </div>
+    <div class="ai-response" id="ai-resp">
+      <div class="ai-tag">AI Analysis — Work IQ Enhanced</div>
+      <div id="ai-text"></div>
+    </div>`;
+  goPage('sim');
+}
+
+// ── DECISION LOGIC ────────────────────────────────────────────────────────
+async function makeDecision(tid,idx,choice){
+  const t=THREATS.find(x=>x.id===tid);
+  const allOpts=t.decision.opts;
+  // Parse delta from option text
+  const match=allOpts[idx].match(/([+\-]\d+)%/);
+  const delta=match?parseInt(match[1]):0;
+  state.survival=Math.max(5,Math.min(100,state.survival+delta));
+  state.decisions++;
+  const sv=document.getElementById('surv-val');
+  const sb=document.getElementById('surv-bar');
+  const dc=document.getElementById('decision-count');
+  if(sv){sv.textContent=state.survival+'%';sv.style.color=state.survival>60?'var(--green3)':state.survival>35?'var(--amber3)':'var(--red)'}
+  if(sb){sb.style.width=state.survival+'%';sb.style.background=state.survival>60?'var(--green)':state.survival>35?'var(--amber)':'var(--red)'}
+  if(dc)dc.textContent=state.decisions+' decision(s) made';
+  document.querySelectorAll('.d-opt').forEach((b,i)=>{
+    b.disabled=true;
+    b.style.opacity=i===idx?'1':'0.35';
+    if(i===idx)b.classList.add('chosen');
+  });
+  const entry={threat:tid,threatName:t.name,icon:t.icon,choice,delta,survival:state.survival,date:new Date().toLocaleDateString()};
+  state.memory.unshift(entry);
+  if(state.memory.length>20)state.memory=state.memory.slice(0,20);
+  localStorage.setItem('nexus_mem',JSON.stringify(state.memory));
+  state.scores.unshift({name:'You',score:state.survival,threat:t.name,date:new Date().toLocaleDateString()});
+  localStorage.setItem('nexus_scores',JSON.stringify(state.scores));
+  document.getElementById('h-decisions').textContent=state.decisions;
+  document.getElementById('h-score').textContent=state.survival+'%';
+  const deltaEl=document.getElementById('ring-delta');
+  if(deltaEl){deltaEl.textContent=(delta>=0?'+':'')+delta+'% this session';deltaEl.style.color=delta>=0?'var(--green3)':'var(--red)'}
+  updateRing();
+  // AI analysis
+  const aiBox=document.getElementById('ai-resp');
+  const aiText=document.getElementById('ai-text');
+  aiBox.classList.add('visible');
+  aiText.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div> Analyzing via Claude + Work IQ...';
+  try{
+    const prev=state.memory.slice(1,4).map(m=>`${m.threatName}: "${m.choice.substring(0,50)}" (${m.delta>0?'+':''}${m.delta}%)`).join(' | ');
+    const prompt=`You are NEXUS, a civilization collapse AI oracle. The user chose: "${choice}" for the threat scenario: ${t.name}. Survival probability changed by ${delta>=0?'+':''}${delta}%. Current civilization survival: ${state.survival}%. Their decision history: ${prev||'First decision'}. Write exactly 3 sentences: (1) immediate geopolitical consequence of this choice, (2) long-term civilizational impact over 10-50 years, (3) what this behavioral pattern reveals about their strategic archetype (e.g. pragmatist, idealist, militarist, technocrat). Be cinematic, data-driven, gravely serious. 80 words max.`;
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:200,messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    const text=d.content?.map(c=>c.text||'').join('')||'Analysis unavailable.';
+    aiText.innerHTML=text+`<br/><br/><span style="font-family:var(--mono);font-size:8px;color:var(--text3)">Work IQ signature captured · Civilization survival: <strong style="color:var(--text)">${state.survival}%</strong></span>`;
+  }catch(e){
+    const fallbacks=['Bold move. The geopolitical shockwave will reshape alliances for decades to come. Your pattern suggests a pragmatist willing to accept systemic risk for immediate gain.','Calculated. Short-term stability purchased at the cost of long-term structural resilience. Work IQ identifies a technocratic decision architecture.','This buys time — but the root collapse vector remains unresolved. The data suggests an idealist who believes in institutional solutions.','Measured and multilateral. Secondary threat vectors are amplified, but the diplomatic dividend compounds over decades.'];
+    aiText.innerHTML=fallbacks[idx%fallbacks.length]+` <br/><br/><span style="font-family:var(--mono);font-size:8px;color:var(--text3)">Civilization survival: <strong style="color:var(--text)">${state.survival}%</strong></span>`;
+  }
+}
+
+// ── RING UPDATE ────────────────────────────────────────────────────────────
+function updateRing(){
+  const pct=state.survival;
+  const circ=2*Math.PI*62;
+  const offset=circ-(circ*pct/100);
+  const c=document.getElementById('ring-circle');if(c)c.setAttribute('stroke-dashoffset',offset.toFixed(1));
+  const h=document.getElementById('hero-pct');if(h)h.textContent=pct+'%';
+}
+
+// ── MEMORY ─────────────────────────────────────────────────────────────────
+function renderMemory(){
+  const pos=state.memory.filter(m=>m.delta>0).length;
+  document.getElementById('mem-total').textContent=state.memory.length;
+  document.getElementById('mem-positive').textContent=pos+'/'+state.memory.length;
+  const el=document.getElementById('memory-list');
+  if(!state.memory.length){
+    el.innerHTML='<div class="empty-mem">No decisions recorded yet.<br/><br/>Start a simulation to build<br/>your Work IQ memory layer.<br/><br/><span style="color:var(--border2)">Every choice is tracked and used<br/>to personalize your AI analysis.</span></div>';
+    return;
+  }
+  el.innerHTML=state.memory.map(m=>`
+    <div class="memory-card">
+      <div class="mem-header"><div class="mem-threat">${m.icon} ${m.threatName}</div><div class="mem-date">${m.date}</div></div>
+      <div class="mem-decision">"${m.choice}"</div>
+      <div class="mem-outcome"><span class="${m.delta>0?'score-up':m.delta<0?'score-dn':'score-eq'}">${m.delta>0?'+':''}${m.delta}% survival impact</span><span style="color:var(--text3);font-family:var(--mono);font-size:9px"> · ${m.survival}% total</span></div>
+    </div>`).join('');
+}
+
+// ── LEADERBOARD ────────────────────────────────────────────────────────────
+function renderLeaderboard(){
+  const avColors=['#3b82f6','#8b5cf6','#10b981','#ef4444','#f59e0b','#06b6d4','#ec4899'];
+  const mock=[
+    {name:'Ashish Kr.',initials:'HK',score:94,threat:'All Scenarios'},
+    {name:'Aisha M.',initials:'AM',score:89,threat:'Climate Cascade'},
+    {name:'Victor R.',initials:'VR',score:85,threat:'AI Singularity'},
+    {name:'Zara Qi',initials:'ZQ',score:81,threat:'Engineered Pandemic'},
+    {name:'Chen Wu',initials:'CW',score:78,threat:'Nuclear Winter'},
+    {name:'Priya S.',initials:'PS',score:74,threat:'Cyber Collapse'},
+    {name:'Marcus T.',initials:'MT',score:71,threat:'Economic Black Hole'},
+  ];
+  const myBest=state.scores.length?Math.max(...state.scores.map(s=>s.score)):null;
+  const all=[...mock];
+  if(myBest)all.push({name:'You',initials:'ME',score:myBest,threat:'Your Simulation',you:true});
+  all.sort((a,b)=>b.score-a.score);
+  const medals=['🥇','🥈','🥉'];
+  document.getElementById('lb-avg').textContent=myBest?myBest+'%':'63%';
+  document.getElementById('lb-list').innerHTML=all.map((e,i)=>`
+    <div class="lb-row ${e.you?'lb-you':''}">
+      <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${medals[i]||i+1}</div>
+      <div class="lb-avatar" style="background:${avColors[i%avColors.length]}22;color:${avColors[i%avColors.length]};border:1px solid ${avColors[i%avColors.length]}44">${e.initials}</div>
+      <div class="lb-name">${e.name}${e.you?' 👈':''}<span class="lb-tag">${e.threat}</span></div>
+      <div class="lb-score">${e.score}%</div>
+    </div>`).join('');
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+initTicker();
+renderThreats();
+updateClock();
+setInterval(updateClock,1000);
+setTimeout(drawRadar,100);
+</script>
+</body>
+</html>
