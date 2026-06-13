@@ -154,13 +154,10 @@ Estimated development time reduction: **~70%**
 
 ```bash
 # 1. Fork or clone this repository
-git clone https://github.com/your-username/nexus.git
-cd nexus
 
 # 2. Enable GitHub Pages in repository settings
-# Settings → Pages → Source: Deploy from main branch / root
 
-# 3. Visit https://your-username.github.io/nexus
+# 3. Visit https://AshQ-ghbi.github.io/nexus
 ```
 
 The app is a **single HTML file** with zero build steps, zero dependencies, and zero configuration required.
@@ -169,7 +166,7 @@ The app is a **single HTML file** with zero build steps, zero dependencies, and 
 
 The Claude AI analysis works **without an API key** — fallback responses are built in. To enable live AI analysis:
 
-The app calls `https://api.anthropic.com/v1/messages` directly from the browser. For a production deployment, you should proxy this through a backend to protect your API key.
+The app calls directly from the browser. For a production deployment, you should proxy this through a backend to protect your API key.
 
 For hackathon/demo purposes, the fallback responses are high-quality and cover all decision archetypes.
 
