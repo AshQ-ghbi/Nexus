@@ -1,4 +1,4 @@
-# NEXUS — Civilization Collapse Engine
+# NEXUS — Civilization Collapse Simulation Engine
 
 > *Eight extinction-level threats. Real scientific data. Every decision reshapes humanity's probability of survival.*
 
