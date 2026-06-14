@@ -22,11 +22,52 @@ Players choose from **8 extinction-level threat scenarios** — each grounded in
 
 ---
 
+## Project Structure
+
+```
+nexus/
+├── index.html          # Complete single-file application
+├── README.md           # This file
+├── docs/
+│   ├── ARCHITECTURE.md # Technical deep-dive
+│   └── WORK_IQ.md      # Work IQ integration documentation
+└── assets/             # (screenshots, diagrams)
+```
+
 ## Tabs
 
 | Home Screen | Threat Matrix | Simulator | Decision Memory |
 |---|---|---|---|
 | Survival ring + doomsday clock + radar chart | 8 threats with risk levels + intel feed | Timeline + decisions + AI analysis | Work IQ persistent memory |
+
+---
+
+## Threat Scenarios
+
+| # | Threat | Risk Index | Tag | Data Sources |
+|---|---|---|---|---|
+| 1 | 🤖 AI Singularity | 88% | EXTREME | RAND Corp, Alignment Forum, ARC Evals |
+| 2 | 🌊 Climate Cascade | 74% | HIGH | NASA Earth Observatory, NOAA, IPCC AR6 |
+| 3 | ☢️ Nuclear Winter | 61% | CRITICAL | SIPRI Yearbook 2024, Bulletin of Atomic Scientists |
+| 4 | 🦠 Engineered Pandemic | 69% | HIGH | WHO, Johns Hopkins CSSE, Our World in Data |
+| 5 | 💹 Economic Black Hole | 52% | MODERATE | IMF World Economic Outlook, World Bank, IIF |
+| 6 | 💻 Cyber Collapse | 58% | HIGH | CISA, Mandiant Threat Report 2024, CrowdStrike |
+| 7 | 🪨 Asteroid Impact | 21% | LOW | NASA CNEOS, ESA NEOCC, B612 Foundation |
+| 8 | ☀️ Solar Superstorm | 44% | MODERATE | NOAA SWPC, Royal Academy of Engineering |
+
+---
+
+## Tech Stack
+
+```
+Frontend:    Vanilla HTML5, CSS3, JavaScript — zero frameworks
+AI Engine:   Anthropic API
+IQ Layer:    Work IQ simulation — localStorage + AI prompt injection
+Dev Tool:    GitHub Copilot in VS Code (Creative Apps track requirement)
+Charts:      HTML5 Canvas API (radar chart)
+Hosting:     GitHub Pages
+Typography:  Orbitron · Space Grotesk · JetBrains Mono (Google Fonts)
+```
 
 ---
 
@@ -95,34 +136,6 @@ const prompt = `... Player's decision history: ${prev || 'First decision'} ...`;
 
 ---
 
-## Threat Scenarios
-
-| # | Threat | Risk Index | Tag | Data Sources |
-|---|---|---|---|---|
-| 1 | 🤖 AI Singularity | 88% | EXTREME | RAND Corp, Alignment Forum, ARC Evals |
-| 2 | 🌊 Climate Cascade | 74% | HIGH | NASA Earth Observatory, NOAA, IPCC AR6 |
-| 3 | ☢️ Nuclear Winter | 61% | CRITICAL | SIPRI Yearbook 2024, Bulletin of Atomic Scientists |
-| 4 | 🦠 Engineered Pandemic | 69% | HIGH | WHO, Johns Hopkins CSSE, Our World in Data |
-| 5 | 💹 Economic Black Hole | 52% | MODERATE | IMF World Economic Outlook, World Bank, IIF |
-| 6 | 💻 Cyber Collapse | 58% | HIGH | CISA, Mandiant Threat Report 2024, CrowdStrike |
-| 7 | 🪨 Asteroid Impact | 21% | LOW | NASA CNEOS, ESA NEOCC, B612 Foundation |
-| 8 | ☀️ Solar Superstorm | 44% | MODERATE | NOAA SWPC, Royal Academy of Engineering |
-
----
-
-## Tech Stack
-
-```
-Frontend:    Vanilla HTML5, CSS3, JavaScript — zero frameworks
-AI Engine:   Anthropic API
-IQ Layer:    Work IQ simulation — localStorage + AI prompt injection
-Dev Tool:    GitHub Copilot in VS Code (Creative Apps track requirement)
-Charts:      HTML5 Canvas API (radar chart)
-Hosting:     GitHub Pages
-Typography:  Orbitron · Space Grotesk · JetBrains Mono (Google Fonts)
-```
-
----
 
 ## Hackathon Alignment
 
@@ -170,20 +183,6 @@ The Claude AI analysis works **without an API key** — fallback responses are b
 The app calls directly from the browser. For a production deployment, you should proxy this through a backend to protect your API key.
 
 For hackathon/demo purposes, the fallback responses are high-quality and cover all decision archetypes.
-
----
-
-## Project Structure
-
-```
-nexus/
-├── index.html          # Complete single-file application
-├── README.md           # This file
-├── docs/
-│   ├── ARCHITECTURE.md # Technical deep-dive
-│   └── WORK_IQ.md      # Work IQ integration documentation
-└── assets/             # (screenshots, diagrams)
-```
 
 ---
 
