@@ -148,19 +148,6 @@ const prompt = `... Player's decision history: ${prev || 'First decision'} ...`;
 | **AI Engine** | Claude via Anthropic API |
 | **Platform** | GitHub Pages |
 
-### Why Creative Apps?
-
-NEXUS is a creative, visually rich, interactive experience that could not exist without AI-assisted development — both in code generation (Copilot) and runtime intelligence (Claude API + Work IQ layer). GitHub Copilot was used to:
-
-- Scaffold the multi-page navigation system
-- Generate threat timeline data structures
-- Write the Work IQ memory layer logic
-- Accelerate the Canvas radar chart implementation
-- Build the CSS animation system
-
-Estimated development time reduction: **~70%**
-
----
 
 ## Setup & Deployment
 
@@ -183,6 +170,20 @@ The Claude AI analysis works **without an API key** — fallback responses are b
 The app calls directly from the browser. For a production deployment, you should proxy this through a backend to protect your API key.
 
 For hackathon/demo purposes, the fallback responses are high-quality and cover all decision archetypes.
+
+---
+
+### Why Creative Apps?
+
+NEXUS is a creative, visually rich, interactive experience that could not exist without AI-assisted development — both in code generation (Copilot) and runtime intelligence (Claude API + Work IQ layer). GitHub Copilot was used to:
+
+- Scaffold the multi-page navigation system
+- Generate threat timeline data structures
+- Write the Work IQ memory layer logic
+- Accelerate the Canvas radar chart implementation
+- Build the CSS animation system
+
+Estimated development time reduction: **~70%**
 
 ---
 
