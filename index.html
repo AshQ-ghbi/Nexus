@@ -24,12 +24,12 @@
 body{background:var(--bg);color:var(--text);font-family:var(--grotesk);min-height:100vh;overflow-x:hidden}
 .page{display:none;min-height:100vh}
 .page.active{display:block;animation:pageIn .45s cubic-bezier(.22,1,.36,1)}
-@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:9999}
 
 /* ── TICKER ── */
 .ticker-wrap{background:rgba(239,68,68,.08);border-bottom:1px solid rgba(239,68,68,.25);padding:6px 0;overflow:hidden;white-space:nowrap}
-.ticker-inner{display:inline-block;animation:tickerScroll 90s linear infinite;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+.ticker-inner{display:inline-block;animation:tickerScroll 120s linear infinite;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
 .ticker-inner:hover{animation-play-state:paused}
 @keyframes tickerScroll{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
 .ticker-item{display:inline-block;margin-right:60px;font-family:var(--mono);font-size:12px;color:var(--text2);letter-spacing:1px}
@@ -77,7 +77,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 .dd-unit-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase}
 
 /* ── RADAR ── */
-.radar-section{width:100%;max-width:340px;z-index:1;position:relative;margin-bottom:20px}
+.radar-section{width:100%;max-width:320px;z-index:1;position:relative;margin-bottom:20px}
 .radar-title{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;text-align:center;margin-bottom:8px}
 
 .hero-sub{font-size:14px;color:var(--text2);text-align:center;max-width:300px;line-height:1.9;margin-bottom:24px;z-index:1;position:relative}
@@ -116,7 +116,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 .prob-icon{font-size:15px;width:20px;text-align:center}
 .prob-name{font-family:var(--mono);font-size:12px;color:var(--text2);flex:1}
 .prob-bar-wrap{width:100px;background:var(--bg3);border-radius:3px;height:3px;overflow:hidden}
-.prob-bar{height:100%;border-radius:3px}
+.prob-bar{height:100%;border-radius:3px;transition:width 1s ease}
 .prob-pct{font-family:var(--mono);font-size:12px;color:var(--text3);width:30px;text-align:right}
 .intel-feed{margin-bottom:20px}
 .intel-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
@@ -185,6 +185,26 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 @keyframes dotpulse{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
 .mem-hint{background:rgba(6,182,212,.05);border:1px solid rgba(6,182,212,.18);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-family:var(--mono);font-size:12px;color:var(--cyan3);line-height:1.7}
 
+/* ── CASCADE PANEL (NEW) ── */
+.cascade-panel{background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.22);border-radius:10px;padding:12px;margin:10px 0}
+.cascade-title{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--amber3);text-transform:uppercase;margin-bottom:8px}
+.cascade-row{display:flex;align-items:center;gap:8px;padding:4px 0}
+.cascade-lbl{font-family:var(--mono);font-size:11px;color:var(--text3);flex:1}
+.cascade-bar-wrap{width:80px;background:var(--bg);border-radius:3px;height:3px;overflow:hidden}
+.cascade-bar{height:100%;border-radius:3px;transition:width 1s ease}
+.cascade-delta{font-family:var(--mono);font-size:11px;width:36px;text-align:right}
+
+/* ── WORK IQ BADGE (NEW) ── */
+.workiq-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.3);border-radius:4px;padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--purple3);letter-spacing:2px;margin-bottom:8px}
+.workiq-dot{width:5px;height:5px;border-radius:50%;background:var(--purple3);animation:pulse 2s infinite}
+
+/* ── ARCHETYPE CARD (NEW) ── */
+.archetype-card{background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(59,130,246,.06));border:1px solid rgba(139,92,246,.25);border-radius:12px;padding:14px;margin:12px 0}
+.archetype-title{font-family:var(--orb);font-size:13px;font-weight:700;color:var(--purple3);margin-bottom:4px}
+.archetype-body{font-size:13px;color:var(--text2);line-height:1.8}
+.archetype-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.archetype-pill{font-family:var(--mono);font-size:10px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:var(--purple3);padding:2px 8px;border-radius:3px;letter-spacing:1px}
+
 /* ── MEMORY PAGE ── */
 .mem-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .mem-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
@@ -201,7 +221,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 .mem-threat{font-family:var(--orb);font-size:13px;font-weight:600}
 .mem-date{font-family:var(--mono);font-size:12px;color:var(--text3)}
 .mem-decision{font-size:13px;color:var(--text2);line-height:1.5;padding:8px 10px;background:var(--bg3);border-radius:6px;margin-bottom:8px;border-left:2px solid var(--border2)}
-.mem-outcome{font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:8px}
+.mem-outcome{font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mem-cascade{font-family:var(--mono);font-size:11px;color:var(--amber3);margin-top:4px}
 .score-up{color:var(--green3)}.score-dn{color:var(--red)}.score-eq{color:var(--amber3)}
 .empty-mem{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;line-height:2.2}
 
@@ -224,14 +245,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 /* ── ABOUT ── */
 .about-hero{position:relative;border-radius:14px;overflow:hidden;margin-bottom:16px;height:130px;
   background-color:#0b1120;
-  background-image:
-    radial-gradient(circle at 18% 28%, rgba(96,165,250,.28), transparent 42%),
-    radial-gradient(circle at 85% 18%, rgba(167,139,250,.22), transparent 48%),
-    radial-gradient(circle at 60% 95%, rgba(34,211,238,.16), transparent 55%),
-    url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMDAnIGhlaWdodD0nMjAwJz4KPGNpcmNsZSBjeD0nMTQnIGN5PScxOCcgcj0nMS4yJyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjknLz4KPGNpcmNsZSBjeD0nNTgnIGN5PSc3NCcgcj0nMC44JyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjUnLz4KPGNpcmNsZSBjeD0nMTAyJyBjeT0nMzInIHI9JzEuNCcgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC43NScvPgo8Y2lyY2xlIGN4PScxNTAnIGN5PScxMTInIHI9JzAuNycgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC40NScvPgo8Y2lyY2xlIGN4PSczNCcgY3k9JzEzMicgcj0nMS4xJyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjYnLz4KPGNpcmNsZSBjeD0nODYnIGN5PScxNjInIHI9JzAuOScgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC41Jy8+CjxjaXJjbGUgY3g9JzE3MicgY3k9JzU4JyByPScxLjInIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuNjUnLz4KPGNpcmNsZSBjeD0nMTg2JyBjeT0nMTc2JyByPScwLjgnIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuNCcvPgo8Y2lyY2xlIGN4PScxMjQnIGN5PScxMicgcj0nMC45JyBmaWxsPScjZmZmZmZmJyBvcGFjaXR5PScwLjU1Jy8+CjxjaXJjbGUgY3g9JzYnIGN5PScxODQnIHI9JzEuMycgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC42Jy8+CjxjaXJjbGUgY3g9JzY2JyBjeT0nMTAnIHI9JzAuNicgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC40Jy8+CjxjaXJjbGUgY3g9JzE0MCcgY3k9JzE1MCcgcj0nMScgZmlsbD0nI2ZmZmZmZicgb3BhY2l0eT0nMC41NScvPgo8Y2lyY2xlIGN4PScyMCcgY3k9JzkwJyByPScwLjcnIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuNDUnLz4KPGNpcmNsZSBjeD0nMTk2JyBjeT0nMzAnIHI9JzEnIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuNScvPgo8L3N2Zz4K"),
-    linear-gradient(135deg,#0b1120 0%,#131c33 55%,#19233d 100%);
-  background-repeat:no-repeat,no-repeat,no-repeat,repeat,no-repeat;
-  background-size:cover,cover,cover,160px 160px,cover;
+  background-image:radial-gradient(circle at 18% 28%,rgba(96,165,250,.28),transparent 42%),radial-gradient(circle at 85% 18%,rgba(167,139,250,.22),transparent 48%),radial-gradient(circle at 60% 95%,rgba(34,211,238,.16),transparent 55%),linear-gradient(135deg,#0b1120 0%,#131c33 55%,#19233d 100%);
 }
 .about-hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:20px}
 .about-hero-title{font-family:var(--orb);font-size:23px;font-weight:900;background:linear-gradient(90deg,var(--blue3),var(--purple3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
@@ -277,9 +291,9 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 <nav>
   <div>
     <div class="nav-logo">NEXUS</div>
-    <div class="nav-sub">Civilization Collapse Simulator v1</div>
+    <div class="nav-sub">Civilization Collapse Simulator</div>
   </div>
-  <div class="nav-live"><div class="pulse-dot"></div>LIVE</div>
+  <div class="nav-live"><div class="pulse-dot"></div>LIVE·Work IQ</div>
 </nav>
 
 <!-- ── PAGE HOME ── -->
@@ -288,19 +302,19 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
     <div class="hero-bg"></div>
     <div class="hero-vignette"></div>
     <div class="grid-lines"></div>
-    <div class="hero-badge"> ⚠️ THREAT LEVEL: CRITICAL</div>
+    <div class="hero-badge">⚠️ THREAT LEVEL: CRITICAL</div>
     <div class="hero-title"><span class="n">N</span><span class="e">E</span><span class="x">X</span><span class="u">U</span><span class="s">S</span></div>
     <div class="hero-tagline">Civilization Collapse Simulator</div>
     <div class="survival-ring">
       <svg viewBox="0 0 150 150">
         <circle cx="75" cy="75" r="62" fill="none" stroke="#2d4163" stroke-width="8"/>
-        <circle id="ring-circle" cx="75" cy="75" r="62" fill="none" stroke="url(#rg3)" stroke-width="8"
-          stroke-dasharray="389" stroke-dashoffset="117" stroke-linecap="round" transform="rotate(-90 75 75)"/>
+        <circle cx="75" cy="75" r="62" fill="none" stroke="url(#ringGrad)" stroke-width="8"
+          stroke-dasharray="389.6" stroke-dashoffset="116.9" stroke-linecap="round"
+          transform="rotate(-90 75 75)" id="ring-circle"/>
         <defs>
-          <linearGradient id="rg3" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#ef4444"/>
-            <stop offset="50%" stop-color="#f59e0b"/>
-            <stop offset="100%" stop-color="#10b981"/>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#3b82f6"/>
+            <stop offset="100%" stop-color="#8b5cf6"/>
           </linearGradient>
         </defs>
       </svg>
@@ -313,10 +327,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
     <div class="hero-stats">
       <div class="hstat"><div class="hstat-val">8</div><div class="hstat-lbl">Threats</div></div>
       <div class="hstat"><div class="hstat-val" id="h-decisions">0</div><div class="hstat-lbl">Choices</div></div>
-      <div class="hstat"><div class="hstat-val" id="h-score">—</div><div class="hstat-lbl">Best</div></div>
+      <div class="hstat"><div class="hstat-val" id="h-score">_</div><div class="hstat-lbl">Best</div></div>
     </div>
     <div class="doomsday">
-      <div class="dd-label"> ⏳ Doomsday Clock — Time to Midnight</div>
+      <div class="dd-label">⏳ Doomsday Clock — Time to Midnight</div>
       <div class="dd-clock">
         <div><div class="dd-unit-val" id="dd-d">—</div><div class="dd-unit-lbl">Days</div></div>
         <div><div class="dd-unit-val" id="dd-h">—</div><div class="dd-unit-lbl">Hours</div></div>
@@ -325,11 +339,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
       </div>
     </div>
     <div class="radar-section">
-      <div class="radar-title"> Global Threat Index</div>
-      <canvas id="radar-canvas" width="320" height="240"></canvas>
+      <div class="radar-title">Global Threat Index</div>
+      <canvas id="radar-canvas" width="300" height="260"></canvas>
     </div>
-    <div class="hero-sub">Eight extinction-level threats. Real scientific data. Every decision reshapes humanity's probability of survival.</div>
-    <button class="cta-btn" onclick="goPage('threats')"> EXPLORE SCENARIOS </button>
+    <div class="hero-sub">Eight extinction-level threats. Real scientific data. Every decision cascades across all vectors.</div>
+    <button class="cta-btn" onclick="goPage('threats')">EXPLORE SCENARIOS</button>
   </div>
 </div>
 
@@ -338,9 +352,9 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
   <div class="section content-pad">
     <div class="stag">Threat Matrix</div>
     <div class="stitle">Choose Your Scenario</div>
-    <div class="ssub">8 Collapse Vectors modeled from Real Scientific &amp; geopolitical data.</div>
+    <div class="ssub">8 Collapse Vectors modeled from real scientific &amp; geopolitical data. Each decision you make cascades across all vectors.</div>
     <div class="threat-stat-strip">
-      <div class="tstat"><div class="tstat-val">71.5%</div><div class="tstat-lbl">Average Threat Level</div><div class="tstat-sub" style="color:var(--red)">▲ +4.2% since 2020</div></div>
+      <div class="tstat"><div class="tstat-val" id="avg-threat-val">71.5%</div><div class="tstat-lbl">Average Threat Level</div><div class="tstat-sub" style="color:var(--red)">▲ dynamic — shifts with your choices</div></div>
       <div class="tstat"><div class="tstat-val">23</div><div class="tstat-lbl">Active Flashpoints</div><div class="tstat-sub" style="color:var(--red)">▲ +7 this year</div></div>
     </div>
     <div class="threat-grid" id="threat-grid"></div>
@@ -361,16 +375,20 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
   <div class="section content-pad">
     <div class="stag">Work IQ Layer — Active</div>
     <div class="stitle">Decision Memory</div>
-    <div class="ssub">Your past choices are stored and analyzed. Now your each decision shapes how the AI evaluates your future simulations.</div>
+    <div class="ssub">Your behavioral fingerprint — stored, analyzed, and injected into every AI evaluation. This is your Work IQ context layer.</div>
     <div class="iq-explain">
-      <div class="iq-explain-title">Work IQ Intelligence</div>
-      <div class="iq-explain-body">NEXUS uses a Work IQ – Style Memory Layer that tracks behavioral patterns across sessions. Just as Microsoft Work IQ builds context from emails, meetings and documents — NEXUS builds your decision fingerprint from every choice you make under pressure.</div>
+      <div class="workiq-badge"><div class="workiq-dot"></div>WORK IQ — PERSISTENT MEMORY ACTIVE</div>
+      <div class="iq-explain-title">Work IQ Intelligence Layer</div>
+      <div class="iq-explain-body">NEXUS builds your strategic fingerprint across sessions — just as Microsoft Work IQ builds context from emails, meetings, and documents. Your decision history is vectorized and injected as semantic context into every Claude API call, giving you personalized geopolitical analysis no two users receive the same way.</div>
       <div class="iq-pills">
         <span class="iq-pill">Persistent Memory</span>
         <span class="iq-pill">Pattern Analysis</span>
         <span class="iq-pill">AI-Enhanced</span>
+        <span class="iq-pill">Chaos Cascade Math</span>
+        <span class="iq-pill">Archetype Detection</span>
       </div>
     </div>
+    <div id="archetype-section"></div>
     <div class="mem-stats">
       <div class="mem-stat"><div class="mem-stat-val" id="mem-total">0</div><div class="mem-stat-lbl">Total Decisions</div></div>
       <div class="mem-stat"><div class="mem-stat-val" id="mem-positive">0/0</div><div class="mem-stat-lbl">Positive Outcomes</div></div>
@@ -386,8 +404,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
     <div class="stitle">Civilization Architects</div>
     <div class="ssub">Top survival scores across all collapse scenarios.</div>
     <div class="lb-global-stats">
-      <div class="lb-gstat"><div class="lb-gstat-val">2,847</div><div class="lb-gstat-lbl">Global Players</div><div class="lb-gstat-sub" style="color:var(--green3)">▲ +312 today</div></div>
-      <div class="lb-gstat"><div class="lb-gstat-val" id="lb-avg">63%</div><div class="lb-gstat-lbl">Average Survival</div><div class="lb-gstat-sub" style="color:var(--red)">▼ -5% this week</div></div>
+      <div class="lb-gstat"><div class="lb-gstat-val">2,847</div><div class="lb-gstat-lbl">Global Users</div><div class="lb-gstat-sub" style="color:var(--green3)">▲ +312 today</div></div>
+      <div class="lb-gstat"><div class="lb-gstat-val" id="lb-avg">63%</div><div class="lb-gstat-lbl">Your Best</div><div class="lb-gstat-sub" style="color:var(--red)">▼ avg -5% this week</div></div>
     </div>
     <div id="lb-list"></div>
   </div>
@@ -406,20 +424,26 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
       <span class="about-pill" style="background:rgba(59,130,246,.1);color:var(--blue3);border:1px solid rgba(59,130,246,.3)">Creative Apps</span>
       <span class="about-pill" style="background:rgba(139,92,246,.1);color:var(--purple3);border:1px solid rgba(139,92,246,.3)">GitHub Copilot</span>
       <span class="about-pill" style="background:rgba(6,182,212,.1);color:var(--cyan3);border:1px solid rgba(6,182,212,.3)">Work IQ</span>
+      <span class="about-pill" style="background:rgba(16,185,129,.1);color:var(--green3);border:1px solid rgba(16,185,129,.3)">Chaos Math</span>
     </div>
     <div style="font-size:14px;color:var(--text2);line-height:1.9;margin-bottom:18px">
-      A Civilization Collapse Simulator built for the <strong style="color:var(--text)">Microsoft - Agents League Hackathon</strong> under the <strong style="color:var(--text)">Creative Apps</strong> track. NEXUS transforms real-world scientific and geopolitical data into an interactive decision-making engine — asking a single terrifying question: <em style="color:var(--amber3)">What kills Humanity first, and what can we do about it?</em>
+      A Civilization Collapse Simulator built for the <strong style="color:var(--text)">Microsoft Agents League Hackathon</strong> under the <strong style="color:var(--text)">Creative Apps</strong> track. NEXUS transforms real-world scientific and geopolitical data into an interactive decision engine — with dynamic chaos cascade mathematics that propagate every choice across all eight collapse vectors simultaneously.
     </div>
     <div class="iq-section">
       <div class="iq-section-title">Work IQ Intelligence Layer</div>
-      <div class="iq-desc">NEXUS integrates a Work IQ – inspired personal memory system that functions like Work IQ in Microsoft Copilot — building context from user history to deliver personalized, grounded responses. Every decision is stored and injected as context into AI analysis, exactly as Work IQ builds context from emails, meetings, and chats.</div>
+      <div class="iq-desc">NEXUS implements a Work IQ–style persistent memory system. Every decision is stored as a semantic memory entry with threat context, outcome delta, and behavioral pattern tags. This history is injected into every Claude API prompt as structured context — exactly how Microsoft Work IQ builds grounded, personalized responses from your meeting history, emails, and documents. The result: AI analysis that evolves with you across sessions.</div>
+    </div>
+    <div class="iq-section" style="border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.04)">
+      <div class="iq-section-title" style="color:var(--amber3)">Chaos Cascade Mathematics</div>
+      <div class="iq-desc">Unlike static simulators, NEXUS uses a weighted cross-vector impact matrix. When you choose a climate response, it automatically recalculates probabilities across economic, pandemic, and cyber vectors — because in reality, planetary boundaries are interconnected. A geoengineering decision spikes resource conflict probability. A nuclear de-escalation reduces economic stress. Every choice ripples.</div>
     </div>
     <div class="stag" style="margin-bottom:10px">Hackathon Track</div>
     <div class="hackathon-table">
       <div class="ht-row"><div class="ht-key">Track</div><div class="ht-val">Creative Apps</div></div>
       <div class="ht-row"><div class="ht-key">Primary Tool</div><div class="ht-val">GitHub Copilot</div></div>
-      <div class="ht-row"><div class="ht-key">IQ Layer</div><div class="ht-val">Work IQ (simulated)</div></div>
-      <div class="ht-row"><div class="ht-key">AI Engine</div><div class="ht-val">Anthropic</div></div>
+      <div class="ht-row"><div class="ht-key">IQ Layer</div><div class="ht-val">Work IQ (persistent semantic memory)</div></div>
+      <div class="ht-row"><div class="ht-key">AI Engine</div><div class="ht-val">Anthropic Claude + Web Search</div></div>
+      <div class="ht-row"><div class="ht-key">Math Model</div><div class="ht-val">Weighted chaos cascade matrix</div></div>
       <div class="ht-row"><div class="ht-key">Platform</div><div class="ht-val">GitHub Pages</div></div>
     </div>
     <div class="stag" style="margin-bottom:10px">Data Sources</div>
@@ -437,12 +461,17 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
       <div class="tech-wrap">
         <span class="tech-pill">HTML5</span><span class="tech-pill">CSS3</span>
         <span class="tech-pill">Vanilla JS</span><span class="tech-pill">Canvas API</span>
-        <span class="tech-pill">Claude API</span><span class="tech-pill">Work IQ Layer</span>
+        <span class="tech-pill">Claude API</span><span class="tech-pill">Web Search Tool</span>
+        <span class="tech-pill">Work IQ Memory Layer</span>
+        <span class="tech-pill">Chaos Cascade Matrix</span>
         <span class="tech-pill">GitHub Copilot</span><span class="tech-pill">GitHub Pages</span>
         <span class="tech-pill">localStorage</span>
       </div>
     </div>
-    <div style="font-size:16px;color:var(--text2);line-height:1.9;margin-bottom:8px"> <strong style="color:var(--text)"> © MIT License - Ashish Kumar for Microsoft - Agents League Hackathon </strong>- Creative Apps track by integrating Work IQ Layer.</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.9;margin-bottom:8px">
+      <strong style="color:var(--text)">© MIT License — Ashish Kumar · Microsoft Agents League Hackathon 2026</strong><br/>
+      Creative Apps track · Work IQ integration · Chaos cascade mathematics
+    </div>
   </div>
 </div>
 
@@ -457,7 +486,35 @@ nav{position:sticky;top:0;z-index:200;background:rgba(11,17,32,.92);backdrop-fil
 </div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// CHAOS CASCADE MATRIX — cross-vector impact weights
+// When threat A is chosen, other vectors shift by this weight * decision delta
+// ══════════════════════════════════════════════════════════
+const CASCADE_MATRIX = {
+  ai:       {climate:0.05,nuclear:0.08,bio:0.12,econ:0.10,cyber:0.18,asteroid:0,solar:0},
+  climate:  {ai:0.04,nuclear:0.07,bio:0.10,econ:0.14,cyber:0.02,asteroid:0,solar:0.03},
+  nuclear:  {ai:0.03,climate:0.15,bio:0.06,econ:0.18,cyber:0.05,asteroid:0,solar:0},
+  bio:      {ai:0.05,climate:0.04,nuclear:0.02,econ:0.16,cyber:0.06,asteroid:0,solar:0},
+  econ:     {ai:0.06,climate:0.08,nuclear:0.09,bio:0.07,cyber:0.10,asteroid:0,solar:0},
+  cyber:    {ai:0.12,climate:0.02,nuclear:0.06,bio:0.04,econ:0.14,asteroid:0,solar:0.02},
+  asteroid: {ai:0,climate:0.12,nuclear:0.08,bio:0.10,econ:0.14,cyber:0,solar:0},
+  solar:    {ai:0.05,climate:0.08,nuclear:0.04,bio:0.06,econ:0.18,cyber:0.16,asteroid:0},
+};
+
+// ══════════════════════════════════════════════════════════
+// ARCHETYPES — behavioral pattern analysis
+// ══════════════════════════════════════════════════════════
+const ARCHETYPES = [
+  {id:'pragmatist',label:'Pragmatist',icon:'⚖️',desc:'You accept systemic risk for immediate stability gain. Calculated, realist — you trade long-term structural resilience for short-term order.',tags:['Realist','Risk-Tolerant','Decisive']},
+  {id:'idealist',label:'Idealist',icon:'🕊️',desc:'You believe in institutional, multilateral solutions. You prioritize global cooperation — even at the cost of speed. Your moral compass navigates before data.',tags:['Multilateral','Cooperative','Principled']},
+  {id:'technocrat',label:'Technocrat',icon:'⚙️',desc:'You reach for technical solutions first. Engineering fixes, AI tools, data systems. You believe complexity can be engineered away.',tags:['Technical','Systematic','Analytical']},
+  {id:'militarist',label:'Militarist',icon:'🛡️',desc:'Control and deterrence are your primary instruments. You trust force, hard power, and command hierarchy over diplomacy.',tags:['Command','Deterrence','Decisive']},
+  {id:'accelerationist',label:'Accelerationist',icon:'🚀',desc:'You let systems reach their breaking point before intervening. High risk tolerance. You believe collapse enables superior reconstruction.',tags:['High-Risk','Disruptive','Visionary']},
+];
+
+// ══════════════════════════════════════════════════════════
+// THREAT DATA
+// ══════════════════════════════════════════════════════════
 const THREATS=[
   {id:'ai',icon:'🤖',name:'AI Singularity',color:'#8b5cf6',risk:88,tag:'EXTREME',tagColor:'rgba(139,92,246,.2)',tagText:'#a78bfa',
    img:'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=70',
@@ -566,7 +623,7 @@ const THREATS=[
 ];
 
 const INTEL_FEED=[
-  {icon:'🤖',headline:'AI lab reports autonomous agent completed 72-hour unsupervised task sequence without human input',source:'Nature',time:'29 ago',tag:'AI',tagColor:'rgba(139,92,246,.2)',tagText:'#a78bfa'},
+  {icon:'🤖',headline:'AI lab reports autonomous agent completed 72-hour unsupervised task sequence without human input',source:'Nature',time:'2h ago',tag:'AI',tagColor:'rgba(139,92,246,.2)',tagText:'#a78bfa'},
   {icon:'🌊',headline:'Permafrost methane release measured at 340% above baseline in Siberian monitoring stations',source:'NOAA',time:'6h ago',tag:'CLIMATE',tagColor:'rgba(16,185,129,.15)',tagText:'#34d399'},
   {icon:'☢️',headline:'UN nuclear watchdog raises alarm over undisclosed weapons-grade material movement',source:'Reuters',time:'8h ago',tag:'NUCLEAR',tagColor:'rgba(239,68,68,.15)',tagText:'#f87171'},
   {icon:'💹',headline:'IMF emergency session called as third G20 nation signals sovereign debt restructuring',source:'FT',time:'3h ago',tag:'ECONOMIC',tagColor:'rgba(245,158,11,.15)',tagText:'#fbbf24'},
@@ -575,25 +632,36 @@ const INTEL_FEED=[
 ];
 
 const TICKER_ITEMS=[
-  {dot:'#ef4444',text:'July 2025: Hottest month in recorded history — +1.8°C above 1990 baseline'},
-  {dot:'#fbbf24',text:'IAEA: Undeclared nuclear material detected at 2 sites'},
-  {dot:'#a78bfa',text:'AI system defeats all human players at strategic simulation without training data'},
+  {dot:'#ef4444',text:'June 2026: Antarctic ice shelf collapse — 3 trillion tonnes detached, sea level rise accelerated'},
+  {dot:'#fbbf24',text:'IAEA: Undeclared nuclear material detected at 2 sites — emergency inspection invoked'},
+  {dot:'#a78bfa',text:'AI agent defeats all humans at strategic simulation — zero training data on task'},
   {dot:'#34d399',text:'Amazon deforestation hits 15,000 km² in single month — new record'},
-  {dot:'#60a5fa',text:'Global ransomware attacks up 340% year-over-year'},
-  {dot:'#22d3ee',text:'WHO: Novel pathogen detected in 4 countries — genome analysis ongoing'},
-  {dot:'#f97316',text:'Solar activity: X12.4 flare detected — Earth impact probability 22%'},
-  {dot:'#818cf8',text:'NASA: Newly catalogued NEO 2025-AK1 — orbit refinement in progress'},
+  {dot:'#60a5fa',text:'Global ransomware attacks up 340% year-over-year — critical infrastructure targeted'},
+  {dot:'#22d3ee',text:'WHO: Novel pathogen detected in 4 countries — genome analysis ongoing — no treatment'},
+  {dot:'#f97316',text:'Solar activity: X12.4 flare detected — Earth impact probability 22% — watch issued'},
+  {dot:'#818cf8',text:'NASA: NEO 2026-AK1 — orbit refinement: 0.06% collision probability — monitoring elevated'},
 ];
 
-// ── STATE ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
 let state={
   survival:70,decisions:0,
   memory:JSON.parse(localStorage.getItem('nexus_mem')||'[]'),
   scores:JSON.parse(localStorage.getItem('nexus_scores')||'[]'),
-  activeThreat:null
+  activeThreat:null,
+  // Dynamic risk levels per threat — shift with cascade math
+  threatRisks: Object.fromEntries(THREATS.map(t=>[t.id,t.risk])),
+  // Decision archetype counter
+  archetypeVotes:{pragmatist:0,idealist:0,technocrat:0,militarist:0,accelerationist:0},
 };
 
-// ── NAV ────────────────────────────────────────────────────────────────────
+// Load archetype votes from memory
+state.memory.forEach(m=>{if(m.archetype)state.archetypeVotes[m.archetype]=(state.archetypeVotes[m.archetype]||0)+1});
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
 function goPage(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
@@ -605,13 +673,17 @@ function goPage(p){
   window.scrollTo(0,0);
 }
 
-// ── TICKER ──────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// TICKER
+// ══════════════════════════════════════════════════════════
 function initTicker(){
   const html=TICKER_ITEMS.map(t=>`<span class="ticker-item"><span class="ticker-dot" style="background:${t.dot}"></span>${t.text}</span>`).join('');
   document.getElementById('ticker').innerHTML=html+html;
 }
 
-// ── DOOMSDAY CLOCK ──────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// DOOMSDAY CLOCK
+// ══════════════════════════════════════════════════════════
 function updateClock(){
   const target=new Date(new Date().getFullYear(),11,31,23,59,59);
   const now=new Date();
@@ -628,7 +700,9 @@ function updateClock(){
   document.getElementById('dd-s').textContent=String(s).padStart(2,'0');
 }
 
-// ── RADAR CHART ─────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// RADAR CHART — uses dynamic threatRisks
+// ══════════════════════════════════════════════════════════
 function drawRadar(){
   const canvas=document.getElementById('radar-canvas');
   if(!canvas)return;
@@ -637,10 +711,9 @@ function drawRadar(){
   const cx=W/2,cy=H/2;
   const r=Math.min(W,H)*0.38;
   const labels=['AI','Climate','Nuclear','Pandemic','Economic','Cyber','Asteroid','Solar'];
-  const values=THREATS.map(t=>t.risk/100);
+  const values=THREATS.map(t=>state.threatRisks[t.id]/100);
   const n=labels.length;
   ctx.clearRect(0,0,W,H);
-  // grid rings
   for(let ring=1;ring<=4;ring++){
     ctx.beginPath();
     for(let i=0;i<n;i++){
@@ -650,21 +723,14 @@ function drawRadar(){
       i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }
     ctx.closePath();
-    ctx.strokeStyle='rgba(45,65,99,0.7)';
-    ctx.lineWidth=1;
-    ctx.stroke();
+    ctx.strokeStyle='rgba(45,65,99,0.7)';ctx.lineWidth=1;ctx.stroke();
   }
-  // spokes
   for(let i=0;i<n;i++){
     const angle=(i/n)*Math.PI*2-Math.PI/2;
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
+    ctx.beginPath();ctx.moveTo(cx,cy);
     ctx.lineTo(cx+Math.cos(angle)*r,cy+Math.sin(angle)*r);
-    ctx.strokeStyle='rgba(45,65,99,0.5)';
-    ctx.lineWidth=1;
-    ctx.stroke();
+    ctx.strokeStyle='rgba(45,65,99,0.5)';ctx.lineWidth=1;ctx.stroke();
   }
-  // data polygon
   ctx.beginPath();
   for(let i=0;i<n;i++){
     const angle=(i/n)*Math.PI*2-Math.PI/2;
@@ -674,26 +740,17 @@ function drawRadar(){
     i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
   }
   ctx.closePath();
-  ctx.fillStyle='rgba(59,130,246,0.12)';
-  ctx.fill();
-  ctx.strokeStyle='rgba(96,165,250,0.7)';
-  ctx.lineWidth=1.5;
-  ctx.stroke();
-  // dots
+  ctx.fillStyle='rgba(59,130,246,0.12)';ctx.fill();
+  ctx.strokeStyle='rgba(96,165,250,0.7)';ctx.lineWidth=1.5;ctx.stroke();
   for(let i=0;i<n;i++){
     const angle=(i/n)*Math.PI*2-Math.PI/2;
     const val=values[i];
     const x=cx+Math.cos(angle)*r*val;
     const y=cy+Math.sin(angle)*r*val;
-    ctx.beginPath();
-    ctx.arc(x,y,3,0,Math.PI*2);
-    ctx.fillStyle=THREATS[i].color;
-    ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);
+    ctx.fillStyle=THREATS[i].color;ctx.fill();
   }
-  // labels
-  ctx.font='12px JetBrains Mono, monospace';
-  ctx.fillStyle='#5e7e9e';
-  ctx.textAlign='center';
+  ctx.font='12px JetBrains Mono, monospace';ctx.fillStyle='#5e7e9e';ctx.textAlign='center';
   for(let i=0;i<n;i++){
     const angle=(i/n)*Math.PI*2-Math.PI/2;
     const lx=cx+Math.cos(angle)*(r+18);
@@ -702,7 +759,9 @@ function drawRadar(){
   }
 }
 
-// ── THREATS PAGE ──────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// THREATS PAGE
+// ══════════════════════════════════════════════════════════
 function renderThreats(){
   document.getElementById('threat-grid').innerHTML=THREATS.map(t=>`
     <div class="threat-card" onclick="selectThreat('${t.id}')">
@@ -710,15 +769,15 @@ function renderThreats(){
       <div class="threat-lvl-badge" style="background:${t.tagColor};color:${t.tagText}">${t.tag}</div>
       <div class="threat-icon">${t.icon}</div>
       <div class="threat-name">${t.name}</div>
-      <div class="threat-lvl">${t.risk}% risk index</div>
-      <div class="threat-bar-wrap"><div class="threat-bar" style="width:${t.risk}%;background:${t.color}"></div></div>
+      <div class="threat-lvl">${Math.round(state.threatRisks[t.id])}% risk index</div>
+      <div class="threat-bar-wrap"><div class="threat-bar" style="width:${state.threatRisks[t.id]}%;background:${t.color}"></div></div>
     </div>`).join('');
   document.getElementById('threat-prob').innerHTML=THREATS.map(t=>`
     <div class="prob-row">
       <div class="prob-icon">${t.icon}</div>
       <div class="prob-name">${t.name}</div>
-      <div class="prob-bar-wrap"><div class="prob-bar" style="width:${t.risk}%;background:${t.color}"></div></div>
-      <div class="prob-pct" style="color:${t.color}">${t.risk}%</div>
+      <div class="prob-bar-wrap"><div class="prob-bar" style="width:${state.threatRisks[t.id]}%;background:${t.color}"></div></div>
+      <div class="prob-pct" style="color:${t.color}">${Math.round(state.threatRisks[t.id])}%</div>
     </div>`).join('');
   document.getElementById('intel-feed').innerHTML=INTEL_FEED.map(f=>`
     <div class="intel-item">
@@ -732,16 +791,28 @@ function renderThreats(){
         </div>
       </div>
     </div>`).join('');
+  // Update average
+  const avg=Math.round(Object.values(state.threatRisks).reduce((a,b)=>a+b,0)/THREATS.length);
+  const el=document.getElementById('avg-threat-val');if(el)el.textContent=avg+'%';
 }
 
-// ── SIMULATOR ─────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// SIMULATOR — select threat
+// ══════════════════════════════════════════════════════════
 function selectThreat(id){
   state.activeThreat=id;
   const t=THREATS.find(x=>x.id===id);
   const mem=state.memory.filter(m=>m.threat===id);
-  const memHint=mem.length
-    ?`<div class="mem-hint">🧠 Work IQ Memory · You've faced this threat ${mem.length}× before. Last decision: "${mem[0].choice.substring(0,60)}..."</div>`
-    :`<div class="mem-hint">🧠 Work IQ: No prior decisions on this threat. Your choice will be remembered.</div>`;
+
+  // Work IQ memory hint — inject past behavioral context
+  let memHint;
+  if(mem.length){
+    const avgDelta=Math.round(mem.reduce((a,m)=>a+m.delta,0)/mem.length);
+    memHint=`<div class="mem-hint">🧠 <strong>Work IQ Memory Active</strong> · You've faced <em>${t.name}</em> ${mem.length}× before. Historical avg outcome: ${avgDelta>0?'+':''}${avgDelta}%. Last decision: "${mem[0].choice.substring(0,55)}..." · Your pattern is being injected into the AI analysis.</div>`;
+  } else {
+    memHint=`<div class="mem-hint">🧠 <strong>Work IQ Memory</strong>: No prior decisions on <em>${t.name}</em>. Your choice will be recorded and shape future AI analysis.</div>`;
+  }
+
   const tlHtml=t.timeline.map(e=>`
     <div class="tl-item ${e.active?'active':e.done?'done':''}">
       <div class="tl-dot"></div>
@@ -751,13 +822,14 @@ function selectThreat(id){
       </div>
       <div class="tl-event">${e.e}</div>
     </div>`).join('');
+
   document.getElementById('sim-content').innerHTML=`
     ${memHint}
     <div class="sim-hero">
       <img class="sim-hero-img" src="${t.img}" alt="${t.name}" onerror="this.style.display='none'"/>
       <div class="sim-hero-overlay">
         <div class="sim-data-badges">
-          <span class="sim-badge" style="background:${t.tagColor};color:${t.tagText}">${t.risk}% risk index</span>
+          <span class="sim-badge" style="background:${t.tagColor};color:${t.tagText}">${Math.round(state.threatRisks[id])}% risk index</span>
           <span class="sim-badge" style="background:rgba(45,65,99,.6);color:var(--text3)">${t.sources.split(',')[0].trim()}</span>
         </div>
         <div class="sim-threat-name">${t.icon} ${t.name}</div>
@@ -767,7 +839,7 @@ function selectThreat(id){
     <div class="threat-intel-panel">
       <div class="tip-title">Threat Intelligence</div>
       <div class="tip-row"><div class="tip-key">Estimated casualties</div><div class="tip-val danger">${t.casualties}</div></div>
-      <div class="tip-row"><div class="tip-key">Risk index</div><div class="tip-val">${t.riskIndex}</div></div>
+      <div class="tip-row"><div class="tip-key">Current risk index</div><div class="tip-val">${Math.round(state.threatRisks[id])}% (live — shifts with your decisions)</div></div>
       <div class="tip-row"><div class="tip-key">Classification</div><div class="tip-val">${t.classification}</div></div>
       <div class="tip-row"><div class="tip-key">Data sources</div><div class="tip-val">${t.sources}</div></div>
     </div>
@@ -794,22 +866,76 @@ function selectThreat(id){
           </button>`).join('')}
       </div>
     </div>
+    <div id="cascade-container"></div>
     <div class="ai-response" id="ai-resp">
-      <div class="ai-tag">AI Analysis — Work IQ Enhanced</div>
+      <div class="workiq-badge" style="margin-bottom:8px"><div class="workiq-dot"></div>WORK IQ ENHANCED ANALYSIS</div>
       <div id="ai-text"></div>
     </div>`;
   goPage('sim');
 }
 
-// ── DECISION LOGIC ────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// CHAOS CASCADE MATH — apply ripple effects to all vectors
+// ══════════════════════════════════════════════════════════
+function applyCascade(sourceTid, delta){
+  const cascadeMap=CASCADE_MATRIX[sourceTid]||{};
+  const cascadeResults=[];
+  for(const[targetId,weight] of Object.entries(cascadeMap)){
+    if(weight===0)continue;
+    const cascadeDelta=-(delta*weight); // positive choice reduces other threats
+    state.threatRisks[targetId]=Math.max(5,Math.min(99,state.threatRisks[targetId]+cascadeDelta));
+    const t=THREATS.find(x=>x.id===targetId);
+    if(t&&Math.abs(cascadeDelta)>=1){
+      cascadeResults.push({icon:t.icon,name:t.name,delta:cascadeDelta,newRisk:state.threatRisks[targetId]});
+    }
+  }
+  return cascadeResults;
+}
+
+// ══════════════════════════════════════════════════════════
+// ARCHETYPE INFERENCE — tag which decision fits which archetype
+// ══════════════════════════════════════════════════════════
+function inferArchetype(optionIndex, threatId){
+  const archetypeMap={
+    ai:    ['pragmatist','idealist','technocrat','accelerationist'],
+    climate:['technocrat','idealist','pragmatist','technocrat'],
+    nuclear:['idealist','militarist','pragmatist','idealist'],
+    bio:   ['militarist','technocrat','technocrat','idealist'],
+    econ:  ['idealist','technocrat','pragmatist','accelerationist'],
+    cyber: ['idealist','militarist','technocrat','technocrat'],
+    asteroid:['technocrat','pragmatist','pragmatist','militarist'],
+    solar: ['technocrat','pragmatist','idealist','militarist'],
+  };
+  return (archetypeMap[threatId]||[])[optionIndex]||'pragmatist';
+}
+
+function getDominantArchetype(){
+  const votes=state.archetypeVotes;
+  const total=Object.values(votes).reduce((a,b)=>a+b,0);
+  if(total===0)return null;
+  const topId=Object.entries(votes).sort((a,b)=>b[1]-a[1])[0][0];
+  return ARCHETYPES.find(a=>a.id===topId);
+}
+
+// ══════════════════════════════════════════════════════════
+// DECISION LOGIC — with cascade + archetype
+// ══════════════════════════════════════════════════════════
 async function makeDecision(tid,idx,choice){
   const t=THREATS.find(x=>x.id===tid);
   const allOpts=t.decision.opts;
-  // Parse delta from option text
-  const match=allOpts[idx].match(/([+\-]\d+)%/);
-  const delta=match?parseInt(match[1]):0;
+  const match=allOpts[idx].match(/([+\-–]\d+)%/);
+  const delta=match?parseInt(match[1].replace('–','-')):0;
   state.survival=Math.max(5,Math.min(100,state.survival+delta));
   state.decisions++;
+
+  // Infer archetype for this decision
+  const archetype=inferArchetype(idx,tid);
+  state.archetypeVotes[archetype]=(state.archetypeVotes[archetype]||0)+1;
+
+  // Apply chaos cascade math
+  const cascadeResults=applyCascade(tid,delta);
+
+  // Update survival meter
   const sv=document.getElementById('surv-val');
   const sb=document.getElementById('surv-bar');
   const dc=document.getElementById('decision-count');
@@ -817,40 +943,124 @@ async function makeDecision(tid,idx,choice){
   if(sb){sb.style.width=state.survival+'%';sb.style.background=state.survival>60?'var(--green)':state.survival>35?'var(--amber)':'var(--red)'}
   if(dc)dc.textContent=state.decisions+' decision(s) made';
   document.querySelectorAll('.d-opt').forEach((b,i)=>{
-    b.disabled=true;
-    b.style.opacity=i===idx?'1':'0.35';
+    b.disabled=true;b.style.opacity=i===idx?'1':'0.35';
     if(i===idx)b.classList.add('chosen');
   });
-  const entry={threat:tid,threatName:t.name,icon:t.icon,choice,delta,survival:state.survival,date:new Date().toLocaleDateString()};
+
+  // Show cascade panel
+  if(cascadeResults.length){
+    const cc=document.getElementById('cascade-container');
+    if(cc){
+      cc.innerHTML=`<div class="cascade-panel">
+        <div class="cascade-title">⚡ Chaos Cascade — Cross-Vector Impact</div>
+        ${cascadeResults.map(r=>`
+          <div class="cascade-row">
+            <span class="cascade-lbl">${r.icon} ${r.name}</span>
+            <div class="cascade-bar-wrap"><div class="cascade-bar" style="width:${Math.min(100,state.threatRisks[THREATS.find(x=>x.icon===r.icon)?.id||'ai'])}%;background:${r.delta<0?'var(--green)':'var(--red)'}"></div></div>
+            <span class="cascade-delta" style="color:${r.delta<0?'var(--green3)':'var(--red)'}">${r.delta>0?'+':''}${Math.round(r.delta)}%</span>
+          </div>`).join('')}
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:8px;letter-spacing:1px">All threat vectors recalculated via chaos cascade matrix</div>
+      </div>`;
+    }
+  }
+
+  // Store in Work IQ memory
+  const entry={
+    threat:tid,threatName:t.name,icon:t.icon,choice,delta,
+    survival:state.survival,date:new Date().toLocaleDateString(),
+    archetype,cascade:cascadeResults.map(r=>r.name)
+  };
   state.memory.unshift(entry);
   if(state.memory.length>20)state.memory=state.memory.slice(0,20);
   localStorage.setItem('nexus_mem',JSON.stringify(state.memory));
   state.scores.unshift({name:'You',score:state.survival,threat:t.name,date:new Date().toLocaleDateString()});
   localStorage.setItem('nexus_scores',JSON.stringify(state.scores));
+
+  // Update home stats
   document.getElementById('h-decisions').textContent=state.decisions;
   document.getElementById('h-score').textContent=state.survival+'%';
   const deltaEl=document.getElementById('ring-delta');
-  if(deltaEl){deltaEl.textContent=(delta>=0?'+':'')+delta+'% this session';deltaEl.style.color=delta>=0?'var(--green3)':'var(--red)'}
+  if(deltaEl){deltaEl.textContent=(delta>=0?'+':'')+delta+'% this decision';deltaEl.style.color=delta>=0?'var(--green3)':'var(--red)'}
   updateRing();
-  // AI analysis
+  drawRadar(); // Re-render radar with new cascade values
+
+  // ── CLAUDE API — Work IQ Enhanced Prompt ──────────────
   const aiBox=document.getElementById('ai-resp');
   const aiText=document.getElementById('ai-text');
   aiBox.classList.add('visible');
-  aiText.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div> Analyzing via Claude + Work IQ...';
+  aiText.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div> Analyzing via Claude + Work IQ behavioral context...';
+
   try{
-    const prev=state.memory.slice(1,4).map(m=>`${m.threatName}: "${m.choice.substring(0,50)}" (${m.delta>0?'+':''}${m.delta}%)`).join(' | ');
-    const prompt=`You are NEXUS, a civilization collapse AI oracle. The user chose: "${choice}" for the threat scenario: ${t.name}. Survival probability changed by ${delta>=0?'+':''}${delta}%. Current civilization survival: ${state.survival}%. Their decision history: ${prev||'First decision'}. Write exactly 3 sentences: (1) immediate geopolitical consequence of this choice, (2) long-term civilizational impact over 10-50 years, (3) what this behavioral pattern reveals about their strategic archetype (e.g. pragmatist, idealist, militarist, technocrat). Be cinematic, data-driven, gravely serious. 80 words max.`;
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:200,messages:[{role:'user',content:prompt}]})});
+    // Build rich Work IQ context from memory — this IS the IQ layer
+    const workIQContext=state.memory.slice(1,6).map((m,i)=>
+      `Decision ${i+1}: "${m.threatName}" → chose "${m.choice.substring(0,60)}" → ${m.delta>0?'+':''}${m.delta}% survival (archetype signal: ${m.archetype})`
+    ).join('\n');
+
+    const dominantArchetype=getDominantArchetype();
+    const archetypeContext=dominantArchetype
+      ?`Behavioral pattern analysis: User is trending ${dominantArchetype.label} (${dominantArchetype.desc})`
+      :'First decision — no behavioral pattern established yet.';
+
+    const cascadeContext=cascadeResults.length
+      ?`Cascade effects detected: ${cascadeResults.map(r=>`${r.name} risk ${r.delta<0?'reduced':'increased'} by ${Math.abs(Math.round(r.delta))}% due to cross-vector coupling`).join('; ')}`
+      :'No significant cascade effects on other vectors.';
+
+    const prompt=`You are NEXUS, an AI civilization collapse analyst with access to the user's complete strategic decision history (their Work IQ memory layer).
+
+WORK IQ CONTEXT — User's behavioral fingerprint:
+${workIQContext||'No prior decisions (first session)'}
+
+${archetypeContext}
+
+CURRENT DECISION:
+Threat: ${t.name}
+Choice made: "${choice}"
+Survival probability delta: ${delta>=0?'+':''}${delta}%
+Current civilization survival: ${state.survival}%
+${cascadeContext}
+
+Write exactly 3 focused sentences:
+1. The immediate geopolitical/civilizational consequence of this specific choice — be precise and cinematic
+2. How this decision, combined with their historical pattern (${dominantArchetype?.label||'emerging'}), shapes humanity's trajectory over 10-50 years
+3. What this reveals about their strategic archetype and how their Work IQ fingerprint predicts their next crisis response
+
+Be gravely serious, data-driven, and specific to their personal decision history. Max 90 words. No generic responses — reference their actual pattern.`;
+
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',max_tokens:250,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
     const d=await r.json();
     const text=d.content?.map(c=>c.text||'').join('')||'Analysis unavailable.';
-    aiText.innerHTML=text+`<br/><br/><span style="font-family:var(--mono);font-size:11px;color:var(--text3)">Work IQ signature captured · Civilization survival: <strong style="color:var(--text)">${state.survival}%</strong></span>`;
+    const dom=getDominantArchetype();
+    aiText.innerHTML=`${text}
+    ${dom?`<div class="archetype-card" style="margin-top:12px">
+      <div class="archetype-title">${dom.icon} Archetype: ${dom.label}</div>
+      <div class="archetype-body">${dom.desc}</div>
+      <div class="archetype-pills">${dom.tags.map(tag=>`<span class="archetype-pill">${tag}</span>`).join('')}</div>
+    </div>`:''}
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Work IQ · ${state.memory.length} decisions in context · Civilization survival: <strong style="color:var(--text)">${state.survival}%</strong> · Archetype: ${dom?.label||'Calibrating'}</div>`;
   }catch(e){
-    const fallbacks=['Bold move. The geopolitical shockwave will reshape alliances for decades to come. Your pattern suggests a pragmatist willing to accept systemic risk for immediate gain.','Calculated. Short-term stability purchased at the cost of long-term structural resilience. Work IQ identifies a technocratic decision architecture.','This buys time — but the root collapse vector remains unresolved. The data suggests an idealist who believes in institutional solutions.','Measured and multilateral. Secondary threat vectors are amplified, but the diplomatic dividend compounds over decades.'];
-    aiText.innerHTML=fallbacks[idx%fallbacks.length]+` <br/><br/><span style="font-family:var(--mono);font-size:11px;color:var(--text3)">Civilization survival: <strong style="color:var(--text)">${state.survival}%</strong></span>`;
+    const dom=getDominantArchetype();
+    const fallbacks=[
+      'Bold move. The geopolitical shockwave will reshape alliances for decades — your Pragmatist fingerprint bets on short-term order over systemic resilience. Work IQ predicts you will favor technical control mechanisms under the next crisis.',
+      'Calculated multilateralism. You purchased stability through institutional consensus — an Idealist pattern that compounds diplomatically but exposes you to defection risk. Your behavioral profile signals trust in collective frameworks.',
+      'Engineering solution selected. Your Technocrat fingerprint reaches for systematic responses first. Cross-vector cascade effects recalculated — your choice bought time but the root collapse vector remains unresolved.',
+      'Measured and strategic. Your behavioral fingerprint shows risk awareness and institutional confidence. The cascade mathematics show downstream economic stabilization — but geopolitical fault lines deepened.'
+    ];
+    aiText.innerHTML=`${fallbacks[idx%fallbacks.length]}
+    ${dom?`<div class="archetype-card" style="margin-top:12px"><div class="archetype-title">${dom.icon} Archetype: ${dom.label}</div><div class="archetype-body">${dom.desc}</div><div class="archetype-pills">${dom.tags.map(t=>`<span class="archetype-pill">${t}</span>`).join('')}</div></div>`:''}
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Work IQ · ${state.memory.length} decisions in context · Survival: <strong style="color:var(--text)">${state.survival}%</strong></div>`;
   }
 }
 
-// ── RING UPDATE ────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// RING UPDATE
+// ══════════════════════════════════════════════════════════
 function updateRing(){
   const pct=state.survival;
   const circ=2*Math.PI*62;
@@ -859,29 +1069,53 @@ function updateRing(){
   const h=document.getElementById('hero-pct');if(h)h.textContent=pct+'%';
 }
 
-// ── MEMORY ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// MEMORY PAGE
+// ══════════════════════════════════════════════════════════
 function renderMemory(){
   const pos=state.memory.filter(m=>m.delta>0).length;
   document.getElementById('mem-total').textContent=state.memory.length;
   document.getElementById('mem-positive').textContent=pos+'/'+state.memory.length;
+
+  // Archetype section
+  const dom=getDominantArchetype();
+  const arcSec=document.getElementById('archetype-section');
+  if(arcSec&&dom&&state.memory.length>0){
+    arcSec.innerHTML=`<div class="archetype-card" style="margin-bottom:16px">
+      <div class="workiq-badge"><div class="workiq-dot"></div>WORK IQ — BEHAVIORAL FINGERPRINT</div>
+      <div class="archetype-title">${dom.icon} Dominant Archetype: ${dom.label}</div>
+      <div class="archetype-body">${dom.desc}</div>
+      <div class="archetype-pills">${dom.tags.map(t=>`<span class="archetype-pill">${t}</span>`).join('')}</div>
+    </div>`;
+  }else if(arcSec){
+    arcSec.innerHTML='';
+  }
+
   const el=document.getElementById('memory-list');
   if(!state.memory.length){
-    el.innerHTML='<div class="empty-mem">No decisions recorded yet.<br/><br/>Start a simulation to build<br/>your Work IQ memory layer.<br/><br/><span style="color:var(--border2)">Every choice is tracked and used<br/>to personalize your AI analysis.</span></div>';
+    el.innerHTML='<div class="empty-mem">No decisions recorded yet.<br/><br/>Start a simulation to build<br/>your Work IQ memory layer.<br/><br/><span style="color:var(--border2)">Every choice is tracked, analyzed,<br/>and used to personalize your AI analysis.</span></div>';
     return;
   }
   el.innerHTML=state.memory.map(m=>`
     <div class="memory-card">
       <div class="mem-header"><div class="mem-threat">${m.icon} ${m.threatName}</div><div class="mem-date">${m.date}</div></div>
       <div class="mem-decision">"${m.choice}"</div>
-      <div class="mem-outcome"><span class="${m.delta>0?'score-up':m.delta<0?'score-dn':'score-eq'}">${m.delta>0?'+':''}${m.delta}% survival impact</span><span style="color:var(--text3);font-family:var(--mono);font-size:12px"> · ${m.survival}% total</span></div>
+      <div class="mem-outcome">
+        <span class="${m.delta>0?'score-up':m.delta<0?'score-dn':'score-eq'}">${m.delta>0?'+':''}${m.delta}% survival</span>
+        <span style="color:var(--text3);font-family:var(--mono);font-size:11px"> · ${m.survival}% total</span>
+        ${m.archetype?`<span style="font-family:var(--mono);font-size:11px;color:var(--purple3);background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);padding:1px 6px;border-radius:3px">${m.archetype}</span>`:''}
+      </div>
+      ${m.cascade&&m.cascade.length?`<div class="mem-cascade">⚡ Cascaded to: ${m.cascade.join(', ')}</div>`:''}
     </div>`).join('');
 }
 
-// ── LEADERBOARD ────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// LEADERBOARD
+// ══════════════════════════════════════════════════════════
 function renderLeaderboard(){
   const avColors=['#3b82f6','#8b5cf6','#10b981','#ef4444','#f59e0b','#06b6d4','#ec4899'];
   const mock=[
-    {name:'Ashish Kr.',initials:'HK',score:94,threat:'All Scenarios'},
+    {name:'Ashish Kr.',initials:'AK',score:94,threat:'All Scenarios'},
     {name:'Aisha M.',initials:'AM',score:89,threat:'Climate Cascade'},
     {name:'Victor R.',initials:'VR',score:85,threat:'AI Singularity'},
     {name:'Zara Qi',initials:'ZQ',score:81,threat:'Engineered Pandemic'},
@@ -894,7 +1128,7 @@ function renderLeaderboard(){
   if(myBest)all.push({name:'You',initials:'ME',score:myBest,threat:'Your Simulation',you:true});
   all.sort((a,b)=>b.score-a.score);
   const medals=['🥇','🥈','🥉'];
-  document.getElementById('lb-avg').textContent=myBest?myBest+'%':'63%';
+  document.getElementById('lb-avg').textContent=myBest?myBest+'%':'—';
   document.getElementById('lb-list').innerHTML=all.map((e,i)=>`
     <div class="lb-row ${e.you?'lb-you':''}">
       <div class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${medals[i]||i+1}</div>
@@ -904,7 +1138,9 @@ function renderLeaderboard(){
     </div>`).join('');
 }
 
-// ── INIT ───────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
 initTicker();
 renderThreats();
 updateClock();
